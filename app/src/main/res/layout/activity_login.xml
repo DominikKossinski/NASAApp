@@ -4,7 +4,55 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".LoginActivity"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".activities.LoginActivity"
+        android:fitsSystemWindows="true"
         >
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+        <android.support.design.widget.TextInputLayout
+                android:id="@+id/apiKeyTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"
+                android:hint="@string/api_key"
+                >
+
+            <android.support.design.widget.TextInputEditText
+                    android:id="@+id/apiKeyTextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/middle_text_size"
+                    />
+        </android.support.design.widget.TextInputLayout>
+
+        <CheckBox
+                android:id="@+id/rememberMeCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/middle_text_size"
+                android:text="@string/remember_me"
+                />
+
+        <Button
+                android:id="@+id/loginButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"
+                android:textSize="@dimen/middle_text_size"
+                android:text="@string/login"
+                />
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

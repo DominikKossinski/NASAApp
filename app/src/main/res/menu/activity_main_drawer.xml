@@ -40,6 +40,12 @@
                     android:icon="@drawable/ic_menu_send"
                     android:title="@string/menu_send"
                     />
+
+            <item
+                    android:id="@+id/logout"
+                    android:icon="@drawable/ic_menu_logout"
+                    android:title="@string/logout"
+                    />
         </menu>
     </item>
 

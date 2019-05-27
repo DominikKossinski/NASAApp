@@ -1,4 +1,4 @@
-package com.example.nasa_app
+package com.example.nasa_app.activities
 
 import android.content.Intent
 import android.net.Uri
@@ -15,11 +15,15 @@ import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import com.example.nasa_app.Article
+import com.example.nasa_app.LastArticlesFragment
+import com.example.nasa_app.R
+import java.text.SimpleDateFormat
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     LastArticlesFragment.OnFragmentInteractionListener {
 
-    private var lastFragment: Fragment = LastArticlesFragment()
+    private var lastFragment: Fragment? = null
     private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
 
     override fun onFragmentInteraction(uri: Uri) {
@@ -29,10 +33,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            setTheme(R.style.NightTheme_NoActionBar)
+        } else {
+            setTheme(R.style.AppTheme_NoActionBar)
+        }
         setContentView(R.layout.activity_main)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            toolbar.popupTheme = R.style.NightTheme_PopupOverlay
+        }
+
+        //TODO get extras from bundle
+        val bundle = intent.extras
+        val apiKey = if (bundle != null) {
+            bundle.getString("apiKey")
+        } else {
+            "DEMO_KEY"
+        }
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
@@ -42,18 +62,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+            this, drawerLayout, toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
         )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
         navView.setNavigationItemSelectedListener(this)
-        setUpFirstFragment()
+        setUpFirstFragment(apiKey)
 
     }
 
-    private fun setUpFirstFragment() {
-        supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, lastFragment).commit()
+    private fun setUpFirstFragment(apiKey: String) {
+        lastFragment = LastArticlesFragment.newInstance(apiKey)
+        supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, lastFragment!!).commit()
     }
 
     override fun onBackPressed() {

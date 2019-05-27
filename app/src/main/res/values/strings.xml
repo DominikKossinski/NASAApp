@@ -14,4 +14,14 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="communicate">Communicate</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_article">ArticleActivity</string>
+    <string name="watch_now">Watch now!</string>
+    <string name="remember_me">Remember ME</string>
+    <string name="api_key">API KEY</string>
+    <string name="login">Login</string>
+    <string name="logout">Log out</string>
+    <string name="is_refreshing">Wait a moment</string>
 </resources>
