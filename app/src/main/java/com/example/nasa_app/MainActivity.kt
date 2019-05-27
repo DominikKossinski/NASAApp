@@ -1,23 +1,36 @@
 package com.example.nasa_app
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+    LastArticlesFragment.OnFragmentInteractionListener {
+
+    private var lastFragment: Fragment = LastArticlesFragment()
+    private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+    override fun onFragmentInteraction(uri: Uri) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
@@ -35,6 +48,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         navView.setNavigationItemSelectedListener(this)
+        setUpFirstFragment()
+
+    }
+
+    private fun setUpFirstFragment() {
+        supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, lastFragment).commit()
     }
 
     override fun onBackPressed() {
@@ -87,5 +106,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun openArticleActivity(article: Article) {
+        val intent = Intent(this, ArticleActivity::class.java)
+        val bundle = Bundle()
+        //TODO przekazać resztę informacji o artykule
+        bundle.putByteArray("image", article.drawable)
+        bundle.putString("title", article.title)
+        bundle.putString("explanation", article.explanation)
+        bundle.putString("mediaType", article.mediaType.mediaType)
+        bundle.putString("date", simpleDateFormat.format(article.date))
+        bundle.putString("url", article.url)
+        bundle.putString("hdUrl", article.hdUrl)
+        intent.putExtras(bundle)
+        startActivity(intent)
+
     }
 }
