@@ -17,12 +17,10 @@ import com.example.nasa_app.DBHelper
 import com.example.nasa_app.R
 import kotlinx.android.synthetic.main.activity_article.*
 import kotlinx.android.synthetic.main.content_article.*
-import java.text.SimpleDateFormat
 
 class ArticleActivity : AppCompatActivity() {
 
     var article: Article? = null
-    private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +54,7 @@ class ArticleActivity : AppCompatActivity() {
                 collapsingToolbarLayout.background = getDrawable(R.mipmap.space)
             }
             setSupportActionBar(toolbar)
-            supportActionBar!!.title = simpleDateFormat.format(article!!.date)
+            supportActionBar!!.title = DBHelper.simpleDateFormat.format(article!!.date)
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             articleTextView.text = article!!.explanation
             titleTextView.text = article!!.title
