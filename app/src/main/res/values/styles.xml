@@ -39,7 +39,7 @@
            parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="NightTheme.PopupOverlay"
-           parent="ThemeOverlay.AppCompat.Dark">
+           parent="ThemeOverlay.AppCompat.Light">
     </style>
 
 </resources>

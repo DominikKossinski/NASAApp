@@ -1,16 +1,19 @@
 package com.example.nasa_app.activities
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.example.nasa_app.Article
 import com.example.nasa_app.ArticleMediaType
+import com.example.nasa_app.DBHelper
 import com.example.nasa_app.R
 import kotlinx.android.synthetic.main.activity_article.*
 import kotlinx.android.synthetic.main.content_article.*
@@ -23,33 +26,32 @@ class ArticleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+        val nightModeFlags = this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             setTheme(R.style.NightTheme_NoActionBar)
         } else {
             setTheme(R.style.AppTheme_NoActionBar)
         }
         setContentView(R.layout.activity_article)
         setSupportActionBar(toolbar)
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            toolbar.popupTheme = R.style.NightTheme_PopupOverlay
+        } else {
+            toolbar.popupTheme = R.style.AppTheme_PopupOverlay
+        }
 
-
+        val dbHelper = DBHelper(this)
         val bundle = intent.extras
         if (bundle != null) {
-            val byteArray = bundle.getByteArray("image")
-            val title = bundle.getString("title")!!
-            val explanation = bundle.getString("explanation")!!
-            val date = simpleDateFormat.parse(bundle.getString("date"))
-            val mediaType = if (bundle.getString("mediaType")!!.compareTo("image") == 0) {
-                ArticleMediaType.IMAGE
-            } else {
-                ArticleMediaType.VIDEO
-            }
-            val url = bundle.getString("url")!!
-            val hdUrl = bundle.getString("hdUrl")
-            article = Article(title, explanation, date, mediaType, url, hdUrl, byteArray)
-            if (byteArray != null) {
-                val drawable = BitmapDrawable(resources, BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size))
+            val date = bundle.getString("date")
+            article = dbHelper.getArticleByDate(date!!)
+            if (article!!.mediaType == ArticleMediaType.IMAGE) {
+                val drawable = BitmapDrawable(
+                    resources,
+                    BitmapFactory.decodeByteArray(article!!.drawable, 0, article!!.drawable!!.size)
+                )
                 collapsingToolbarLayout.background = drawable
-            } else {
+            } else if (article!!.mediaType == ArticleMediaType.VIDEO) {
                 //TODO znaleźć lepsz zdjęcie
                 collapsingToolbarLayout.background = getDrawable(R.mipmap.space)
             }
@@ -70,10 +72,18 @@ class ArticleActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.article_menu, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             android.R.id.home -> {
                 finish()
+            }
+            R.id.saveArticle -> {
+                //TODO dodać zapisywanie artykułu
             }
         }
         return super.onOptionsItemSelected(item)

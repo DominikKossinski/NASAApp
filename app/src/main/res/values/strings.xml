@@ -24,4 +24,6 @@
     <string name="login">Login</string>
     <string name="logout">Log out</string>
     <string name="is_refreshing">Wait a moment</string>
+    <string name="save">Save</string>
+    <string name="search">Search</string>
 </resources>

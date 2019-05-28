@@ -1,6 +1,7 @@
 package com.example.nasa_app.activities
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -12,13 +13,17 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.example.nasa_app.Article
+import com.example.nasa_app.BuildConfig
 import com.example.nasa_app.LastArticlesFragment
 import com.example.nasa_app.R
 import java.text.SimpleDateFormat
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     LastArticlesFragment.OnFragmentInteractionListener {
@@ -33,7 +38,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+        val nightModeFlags = this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             setTheme(R.style.NightTheme_NoActionBar)
         } else {
             setTheme(R.style.AppTheme_NoActionBar)
@@ -91,6 +97,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
+        val myActionMenuItem = menu.findItem(R.id.action_search)
+        val searchView = myActionMenuItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                if (BuildConfig.DEBUG) {
+                    Log.d("MainActivity", "Querry: '${p0!!}'")
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                if (BuildConfig.DEBUG) {
+                    Log.d("MainActivity", "Querry: '${p0!!}'")
+                }
+                return true
+            }
+
+        })
         return true
     }
 
@@ -134,14 +158,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun openArticleActivity(article: Article) {
         val intent = Intent(this, ArticleActivity::class.java)
         val bundle = Bundle()
-        //TODO przekazać resztę informacji o artykule
-        bundle.putByteArray("image", article.drawable)
-        bundle.putString("title", article.title)
-        bundle.putString("explanation", article.explanation)
-        bundle.putString("mediaType", article.mediaType.mediaType)
         bundle.putString("date", simpleDateFormat.format(article.date))
-        bundle.putString("url", article.url)
-        bundle.putString("hdUrl", article.hdUrl)
         intent.putExtras(bundle)
         startActivity(intent)
 

@@ -7,6 +7,7 @@ import java.util.concurrent.Semaphore
 import javax.net.ssl.HttpsURLConnection
 
 class GetImageAsyncTask(
+    private val dbHelper: DBHelper,
     private val article: Article,
     private val adapter: ArticlesRVAdapter,
     private val semaphore: Semaphore,
@@ -29,6 +30,7 @@ class GetImageAsyncTask(
 
     override fun onPostExecute(result: ByteArray?) {
         article.drawable = result
+        dbHelper.insertArticle(article)
         adapter.notifyDataSetChanged()
 
         semaphore.acquire()

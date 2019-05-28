@@ -2,19 +2,19 @@ package com.example.nasa_app.activities
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.app.AppCompatDelegate
 import com.example.nasa_app.R
 
 class LauncherActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            setTheme(R.style.NightTheme)
+        val nightModeFlags = this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+            setTheme(R.style.NightTheme_NoActionBar)
         } else {
             setTheme(R.style.AppTheme_NoActionBar)
         }

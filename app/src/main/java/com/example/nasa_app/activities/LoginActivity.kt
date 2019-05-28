@@ -2,9 +2,9 @@ package com.example.nasa_app.activities
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.app.AppCompatDelegate
 import com.example.nasa_app.R
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -12,7 +12,8 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+        val nightModeFlags = this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             setTheme(R.style.NightTheme)
         } else {
             setTheme(R.style.AppTheme_NoActionBar)
