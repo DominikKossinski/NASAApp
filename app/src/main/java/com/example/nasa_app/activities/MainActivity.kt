@@ -1,5 +1,6 @@
 package com.example.nasa_app.activities
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
@@ -18,10 +19,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import com.example.nasa_app.Article
-import com.example.nasa_app.BuildConfig
-import com.example.nasa_app.LastArticlesFragment
-import com.example.nasa_app.R
+import com.example.nasa_app.*
 import java.text.SimpleDateFormat
 
 
@@ -30,6 +28,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private var lastFragment: Fragment? = null
     private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+    private var dbHelper: DBHelper? = null
+    private var menu: Menu? = null
 
     override fun onFragmentInteraction(uri: Uri) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -46,13 +46,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         setContentView(R.layout.activity_main)
 
+        //TODO get user data
+        dbHelper = DBHelper(this)
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             toolbar.popupTheme = R.style.NightTheme_PopupOverlay
         }
 
-        //TODO get extras from bundle
         val bundle = intent.extras
         val apiKey = if (bundle != null) {
             bundle.getString("apiKey")
@@ -97,25 +99,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
+        this.menu = menu
         val myActionMenuItem = menu.findItem(R.id.action_search)
         val searchView = myActionMenuItem.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(p0: String?): Boolean {
+            override fun onQueryTextSubmit(pattern: String?): Boolean {
                 if (BuildConfig.DEBUG) {
-                    Log.d("MainActivity", "Querry: '${p0!!}'")
+                    Log.d("MainActivity", "Querry: '${pattern!!}'")
+                }
+                if (lastFragment is LastArticlesFragment) {
+                    val lastArticlesFragment = lastFragment as LastArticlesFragment
+                    lastArticlesFragment.adapter!!.articles = dbHelper!!.getArticlesByPattern(pattern!!.toLowerCase())
+                    lastArticlesFragment.adapter!!.notifyDataSetChanged()
+                    //TODO zrobić brak artykułów
                 }
                 return true
             }
 
-            override fun onQueryTextChange(p0: String?): Boolean {
+            override fun onQueryTextChange(pattern: String?): Boolean {
                 if (BuildConfig.DEBUG) {
-                    Log.d("MainActivity", "Querry: '${p0!!}'")
+                    Log.d("MainActivity", "Querry: '${pattern!!}'")
+                }
+                if (lastFragment is LastArticlesFragment) {
+                    val lastArticlesFragment = lastFragment as LastArticlesFragment
+                    lastArticlesFragment.adapter!!.articles = dbHelper!!.getArticlesByPattern(pattern!!.toLowerCase())
+                    lastArticlesFragment.adapter!!.notifyDataSetChanged()
+                    //TODO zrobić brak artykułów
                 }
                 return true
             }
 
         })
-        return true
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -149,10 +164,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_send -> {
 
             }
+            R.id.nav_logout -> {
+                logOut()
+            }
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun logOut() {
+        val preferences = getSharedPreferences("com.example.nasa_app.MyPref", Context.MODE_PRIVATE)
+        val editor = preferences.edit()
+        editor.putString("name", "")
+        editor.putString("password", "")
+        editor.apply()
+        openLoginActivity()
+    }
+
+    private fun openLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     fun openArticleActivity(article: Article) {

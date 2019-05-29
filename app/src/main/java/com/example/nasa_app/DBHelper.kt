@@ -188,5 +188,19 @@ class DBHelper(val context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         return dates
     }
 
+    fun getArticlesByPattern(pattern: String): ArrayList<Article> {
+        val allArticles = getAllArticles()
+        val articles = ArrayList<Article>()
+        for (article in allArticles) {
+            if (article.title.toLowerCase().contains(pattern) || simpleDateFormat.format(article.date).toLowerCase().contains(
+                    pattern
+                )
+            ) {
+                articles.add(article)
+            }
+        }
+        return articles
+    }
+
 
 }

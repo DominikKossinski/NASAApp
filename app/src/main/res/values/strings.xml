@@ -26,4 +26,11 @@
     <string name="is_refreshing">Wait a moment</string>
     <string name="save">Save</string>
     <string name="search">Search</string>
+    <string name="password">Password</string>
+    <string name="user_name">User Name</string>
+    <string name="no_user">No user with this name</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="create_account">Create Account</string>
+    <string name="empty_name">Empty name</string>
+    <string name="empty_password">Empty password</string>
 </resources>

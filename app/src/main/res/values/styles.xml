@@ -34,6 +34,23 @@
     <style name="AppTheme.PopupOverlay"
            parent="ThemeOverlay.AppCompat.Light"/>
 
+    <style name="HintTextInputLabelAppearance" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/margin</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:padding">@dimen/padding_16dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:background">@color/colorAccent</item>
+    </style>
+
+    <style name="ErrorTextInputLabelAppearance" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/red</item>
+    </style>
 
     <style name="NightTheme.AppBarOverlay"
            parent="ThemeOverlay.AppCompat.Light"/>
@@ -42,4 +59,20 @@
            parent="ThemeOverlay.AppCompat.Light">
     </style>
 
+    <style name="TextInputEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
+    </style>
+
+    <style name="TextInputLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/margin</item>
+        <item name="android:textColorHint">@color/white</item>
+    </style>
+
+    <color name="red">#FF0000</color>
+    <dimen name="padding_16dp">16dp</dimen>
 </resources>

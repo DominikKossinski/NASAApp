@@ -8,6 +8,7 @@
             android:id="@+id/action_search"
             android:icon="@android:drawable/ic_menu_search"
             app:showAsAction="ifRoom|collapseActionView"
+            android:visible="true"
             android:orderInCategory="100"
             app:actionViewClass="android.support.v7.widget.SearchView"
             android:title="@string/search"
