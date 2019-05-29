@@ -15,8 +15,6 @@
     <string name="menu_send">Send</string>
     <string name="communicate">Communicate</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_article">ArticleActivity</string>
     <string name="watch_now">Watch now!</string>
     <string name="remember_me">Remember ME</string>
@@ -33,4 +31,18 @@
     <string name="create_account">Create Account</string>
     <string name="empty_name">Empty name</string>
     <string name="empty_password">Empty password</string>
+    <string name="accept_rules">Accept Rules</string>
+    <string name="back">Back</string>
+    <string name="email">Email</string>
+    <string name="empty_email">Empty Email</string>
+    <string name="to_short_password">To short password</string>
+    <string name="success">Success!</string>
+    <string name="user_created">User %s created. Now you can login to our app :)</string>
+    <string name="invalid_characters">Name contains invalid characters</string>
+    <string name="name_invalid_characters">Name contains invalid characters</string>
+    <string name="password_invalid_characters">Password contains invalid characters</string>
+    <string name="not_email">It isn\'t email</string>
+    <string name="name_to_long">User name is to long</string>
+    <string name="to_long_password">Password is too long</string>
+    <string name="user_exists">User exists</string>
 </resources>

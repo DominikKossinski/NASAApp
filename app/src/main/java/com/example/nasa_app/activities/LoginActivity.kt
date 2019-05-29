@@ -22,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
         setUpTheme()
         setContentView(R.layout.activity_login)
         setUpTextWatchers()
-        setUpOnClickListerers()
+        setUpOnClickListeners()
     }
 
     private fun setUpTheme() {
@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
         window.statusBarColor = Color.TRANSPARENT
     }
 
-    private fun setUpOnClickListerers() {
+    private fun setUpOnClickListeners() {
         loginButton.setOnClickListener {
             val name = nameTextInputEditText.text.toString()
             val password = passwordTextInputEditText.text.toString()
@@ -74,7 +74,9 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.toString().compareTo("") == 0) {
-                    nameTextInputLayout.error = getString(R.string.empty_name)
+                    if (!nameTextInputLayout.error.toString().contentEquals(getString(R.string.no_user))) {
+                        nameTextInputLayout.error = getString(R.string.empty_name)
+                    }
                 } else {
                     nameTextInputLayout.error = null
                 }
@@ -90,7 +92,9 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.toString().compareTo("") == 0) {
-                    passwordTextInputLayout.error = getString(R.string.empty_password)
+                    if (!passwordTextInputLayout.error.toString().contentEquals(getString(R.string.wrong_password))) {
+                        passwordTextInputLayout.error = getString(R.string.empty_password)
+                    }
                 } else {
                     passwordTextInputLayout.error = null
                 }
