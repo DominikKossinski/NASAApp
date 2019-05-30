@@ -1,7 +1,10 @@
-package com.example.nasa_app
+package com.example.nasa_app.asynctasks
 
 import android.os.AsyncTask
 import android.support.v4.widget.SwipeRefreshLayout
+import com.example.nasa_app.Article
+import com.example.nasa_app.ArticlesRVAdapter
+import com.example.nasa_app.DBHelper
 import java.net.URL
 import java.util.concurrent.Semaphore
 import javax.net.ssl.HttpsURLConnection

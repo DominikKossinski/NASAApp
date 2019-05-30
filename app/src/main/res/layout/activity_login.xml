@@ -31,7 +31,6 @@
 
             <android.support.design.widget.TextInputEditText
                     android:id="@+id/nameTextInputEditText"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     style="@style/TextInputEditText"
                     />
         </android.support.design.widget.TextInputLayout>

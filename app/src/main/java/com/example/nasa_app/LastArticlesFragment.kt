@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.nasa_app.asynctasks.GetArticleAsyncTask
+import com.example.nasa_app.asynctasks.GetImageAsyncTask
 import kotlinx.android.synthetic.main.fragment_last_articles.*
 import java.text.SimpleDateFormat
 import java.util.concurrent.Semaphore
@@ -95,6 +97,26 @@ class LastArticlesFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    fun getArticleByDate(date: String, dbHelper: DBHelper, user: User) {
+        articlesSwipeRefreshLayout.isRefreshing = true
+        val semaphore = Semaphore(1)
+        val getArticlesTasks = ArrayList<GetArticleAsyncTask>()
+        val getImageTasks = ArrayList<GetImageAsyncTask>()
+        val task = GetArticleAsyncTask(
+            dbHelper,
+            articles,
+            date,
+            adapter!!,
+            semaphore,
+            getArticlesTasks,
+            getImageTasks,
+            articlesSwipeRefreshLayout,
+            user.apiKey!!
+        )
+        getArticlesTasks.add(task)
+        task.execute()
     }
 
     /**

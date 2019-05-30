@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import com.example.nasa_app.*
 import java.text.SimpleDateFormat
 
@@ -30,6 +31,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
     private var dbHelper: DBHelper? = null
     private var menu: Menu? = null
+    var user: User? = null
+    var jsessionid: String? = null
 
     override fun onFragmentInteraction(uri: Uri) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -46,6 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         setContentView(R.layout.activity_main)
 
+
         //TODO get user data
         dbHelper = DBHelper(this)
 
@@ -56,16 +60,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         val bundle = intent.extras
-        val apiKey = if (bundle != null) {
-            bundle.getString("apiKey")
-        } else {
-            "DEMO_KEY"
+        if (bundle != null) {
+            getDataFromBundle(bundle)
         }
+
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            run {
+                showAddDialog()
+            }
+
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -78,8 +83,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         navView.setNavigationItemSelectedListener(this)
-        setUpFirstFragment(apiKey)
+        setUpFirstFragment(user!!.apiKey!!)
 
+        val headerView = navView.getHeaderView(0)
+        val nameTextView = headerView.findViewById<TextView>(R.id.userNameTextView)
+        val emailTextView = headerView.findViewById<TextView>(R.id.userEmailTextView)
+        nameTextView.text = user!!.name
+        emailTextView.text = user!!.email
+
+    }
+
+    private fun showAddDialog() {
+        val dialog = AddDialogFragment.newInstance(this)
+        dialog.show(supportFragmentManager, "add dialog")
+
+    }
+
+    private fun getDataFromBundle(bundle: Bundle) {
+        jsessionid = bundle.getString("JSESSIONID", "")
+        val id = bundle.getLong("userId", 0)
+        val name = bundle.getString("name", "")
+        val password = bundle.getString("password", "")
+        val role = bundle.getString("role", "")
+        val email = bundle.getString("email", "")
+        val apiKey = bundle.getString("apiKey", "")
+        user = User(id, name, password, role, email, apiKey)
     }
 
     private fun setUpFirstFragment(apiKey: String) {
@@ -146,22 +174,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_home -> {
+            R.id.nav_last_articles -> {
                 // Handle the camera action
             }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_tools -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
+            R.id.nav_my_articles -> {
 
             }
             R.id.nav_logout -> {
@@ -195,5 +211,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         intent.putExtras(bundle)
         startActivity(intent)
 
+    }
+
+    fun getArticleByDate(date: String) {
+        if (!dbHelper!!.existsArticle(date)) {
+            if (lastFragment is LastArticlesFragment) {
+                (lastFragment as LastArticlesFragment).getArticleByDate(date, dbHelper!!, user!!)
+            }
+        } else {
+            Snackbar.make(findViewById(R.id.main), R.string.already_exists, Snackbar.LENGTH_SHORT)
+                .show()
+        }
     }
 }

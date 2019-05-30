@@ -45,4 +45,10 @@
     <string name="name_to_long">User name is to long</string>
     <string name="to_long_password">Password is too long</string>
     <string name="user_exists">User exists</string>
+    <string name="account">Account</string>
+    <string name="menu_last_articles">Last Articles</string>
+    <string name="menu_my_articles">My Articles</string>
+    <string name="date_sting">Date:</string>
+    <string name="select_date">Select date:</string>
+    <string name="already_exists">Article alredy exists</string>
 </resources>

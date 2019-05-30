@@ -202,5 +202,18 @@ class DBHelper(val context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 
         return articles
     }
 
+    fun existsArticle(date: String): Boolean {
+        val db = readableDatabase
+        val projection = arrayOf(ID)
+        val selection = " date = '${dateFormat.format(simpleDateFormat.parse(date))}' and $ID = 0"
+        val cursor = db.query(
+            ARTICLES_TABLE, projection, selection, null,
+            null, null, null
+        )
+        val bool = cursor.count == 1
+        cursor.close()
+        return bool
+    }
+
 
 }

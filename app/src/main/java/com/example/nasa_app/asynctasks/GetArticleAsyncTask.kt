@@ -1,8 +1,9 @@
-package com.example.nasa_app
+package com.example.nasa_app.asynctasks
 
 import android.os.AsyncTask
 import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
+import com.example.nasa_app.*
 import org.json.JSONObject
 import java.net.URL
 import java.text.SimpleDateFormat
