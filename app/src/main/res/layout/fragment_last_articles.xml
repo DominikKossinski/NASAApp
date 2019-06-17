@@ -23,4 +23,24 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/noArticlesLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:text="@string/no_articles"
+                />
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

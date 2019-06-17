@@ -5,7 +5,7 @@
         >
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/white"/>
+            <solid android:color="@color/zero_alpha"/>
             <stroke
                     android:color="@color/ocean_blue"
                     android:width="2dp"

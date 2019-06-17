@@ -19,7 +19,8 @@ class GetArticleAsyncTask(
     private val getArticleTasks: ArrayList<GetArticleAsyncTask>,
     private val getImageTasks: ArrayList<GetImageAsyncTask>,
     private val swipeRefreshLayout: SwipeRefreshLayout,
-    private val apiKey: String
+    private val apiKey: String,
+    private val user: User
 ) : AsyncTask<String, Article, Article>() {
     override fun doInBackground(vararg params: String?): Article? {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -31,7 +32,7 @@ class GetArticleAsyncTask(
         if (connection.responseCode == 200) {
             val response = url.readText()
             if (BuildConfig.DEBUG) {
-                Log.d("GetArticleAsyncTask", "Resp: $response")
+                Log.d("MyLog:GetArticleTask", "Resp: $response")
             }
             val jsonResponse = JSONObject(response)
             var mediaType = ArticleMediaType.IMAGE
@@ -41,10 +42,9 @@ class GetArticleAsyncTask(
             val article = Article(
                 jsonResponse.getString("title"), jsonResponse.getString("explanation"),
                 simpleDateFormat.parse(jsonResponse.getString("date")), mediaType,
-                jsonResponse.getString("url")
+                jsonResponse.getString("url"), saved = false
             )
             if (article.mediaType == ArticleMediaType.IMAGE) {
-                //TODO dopissać AsyncTask do pobierania zdj
                 val task = GetImageAsyncTask(
                     dbHelper,
                     article,
@@ -52,12 +52,13 @@ class GetArticleAsyncTask(
                     semaphore,
                     getArticleTasks,
                     getImageTasks,
-                    swipeRefreshLayout
+                    swipeRefreshLayout,
+                    user
                 )
                 getImageTasks.add(task)
                 task.execute()
             } else {
-                dbHelper.insertArticle(article)
+                dbHelper.insertArticle(article, user)
             }
             articleArrayList.add(
                 article
@@ -70,8 +71,7 @@ class GetArticleAsyncTask(
     }
 
     override fun onPostExecute(article: Article?) {
-        //TODO  sortowanie listy artykułów
-        adapter.notifyDataSetChanged()
+        adapter.sortNotify()
         semaphore.acquire()
         var done = true
         for (task in getArticleTasks) {

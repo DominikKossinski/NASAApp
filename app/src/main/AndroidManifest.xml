@@ -17,7 +17,8 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
-            tools:targetApi="n">
+            tools:targetApi="n"
+            android:name=".NasaApp">
         <activity android:name=".activities.CreateAccountActivity">
         </activity>
         <activity android:name=".activities.LauncherActivity">
@@ -52,6 +53,10 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+
+        <service android:name=".AppService">
+
+        </service>
     </application>
 
 </manifest>

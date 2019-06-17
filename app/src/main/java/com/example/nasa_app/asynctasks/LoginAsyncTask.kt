@@ -2,6 +2,7 @@ package com.example.nasa_app.asynctasks
 
 import android.app.Activity
 import android.os.AsyncTask
+import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.util.Log
@@ -10,8 +11,10 @@ import android.widget.ProgressBar
 import com.example.nasa_app.BuildConfig
 import com.example.nasa_app.R
 import com.example.nasa_app.User
+import com.example.nasa_app.activities.ArticleActivity
 import com.example.nasa_app.activities.LauncherActivity
 import com.example.nasa_app.activities.LoginActivity
+import com.example.nasa_app.activities.MainActivity
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -23,11 +26,11 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class LoginAsyncTask(
-    private val activity: Activity, var user: String, val nameTextInputLayout: TextInputLayout? = null,
-    val passwordTextInputLayout: TextInputLayout? = null,
-    val nameTextInputEditText: TextInputEditText? = null,
-    val passwordTextInputEditText: TextInputEditText? = null,
-    val progressBar: ProgressBar? = null
+    private val activity: Activity, var user: String, private val nameTextInputLayout: TextInputLayout? = null,
+    private val passwordTextInputLayout: TextInputLayout? = null,
+    private val nameTextInputEditText: TextInputEditText? = null,
+    private val passwordTextInputEditText: TextInputEditText? = null,
+    private val progressBar: ProgressBar? = null
 ) :
     AsyncTask<String, String, JsonObject>() {
     override fun doInBackground(vararg params: String?): JsonObject {
@@ -74,49 +77,87 @@ class LoginAsyncTask(
             val responseObject = Gson().fromJson(respString, JsonElement::class.java).asJsonObject
             responseObject.addProperty("JSESSIONID", jsessionid)
             if (BuildConfig.DEBUG) {
-                Log.d("LoginAsyncTask", "JSESSIONID: $jsessionid")
-                Log.d("LoginAsyncTask", "Response: $responseObject")
+                Log.d("MyLog:LoginAsyncTask", "JSESSIONID: $jsessionid")
+                Log.d("MyLog:LoginAsyncTask", "Response: $responseObject")
             }
             return responseObject
         }
-        //TODO zwrócenie errora
         return JsonObject()
     }
 
     override fun onPostExecute(response: JsonObject?) {
+        if (response!!.has("logged")) {
+            if (activity is LauncherActivity) {
+                val launcherActivity = activity
+                if (response.get("logged").asBoolean) {
+                    val userData = Gson().fromJson(response.getAsJsonObject("user"), User::class.java)
+                    launcherActivity.openMainActivity(userData, response.get("JSESSIONID").asString)
+                    if (BuildConfig.DEBUG) {
+                        Log.d("LoginAsyncTask", "JSESSIONID = ${response.get("JSESSIONID").asString}")
+                    }
+                } else {
+                    launcherActivity.openLoginActivity()
+                }
+            } else if (activity is LoginActivity) {
+                val loginActivity = activity
+                if (response.get("logged").asBoolean) {
+                    if (BuildConfig.DEBUG) {
+                        Log.d("LoginAsyncTask", "JSESSIONID = ${response.get("JSESSIONID").asString}")
+                    }
+                    val userData = Gson().fromJson(response.getAsJsonObject("user"), User::class.java)
+                    loginActivity.openMainActivity(userData, response.get("JSESSIONID").asString)
 
-        if (activity is LauncherActivity) {
-            val launcherActivity = activity
-            if (response!!.get("logged").asBoolean) {
-                val userData = Gson().fromJson(response.getAsJsonObject("user"), User::class.java)
-                launcherActivity.openMainActivity(userData, response.get("JSESSIONID").asString)
+                } else {
+                    if (response.get("error").asString!!.contentEquals("no user")) {
+                        nameTextInputEditText!!.setText("")
+                        passwordTextInputEditText!!.setText("")
+                        nameTextInputLayout!!.error = activity.getString(R.string.no_user)
+                    } else if (response.get("error").asString!!.contentEquals("wrong password")) {
+                        passwordTextInputLayout!!.error = activity.getString(R.string.wrong_password)
+                        passwordTextInputEditText!!.setText("")
+                    }
+                    progressBar!!.visibility = View.GONE
+                }
+
+            } else if (activity is MainActivity) {
                 if (BuildConfig.DEBUG) {
-                    Log.d("LoginAsyncTask", "JSESSIONID = ${response.get("JSESSIONID").asString}")
+                    Log.d("MyLog:LoginAsyncTask", "Login from MainActivity")
                 }
-            } else {
-                launcherActivity.openLoginActivity()
-            }
-        } else if (activity is LoginActivity) {
-            val loginActivity = activity
-            if (response!!.get("logged").asBoolean) {
+                if (response.get("logged").asBoolean) {
+                    val bundle = Bundle()
+                    val jsessionid = response.get("JSESSIONID").asString!!
+                    val userData = Gson().fromJson(response.getAsJsonObject("user"), User::class.java)
+                    bundle.putString("JSESSIONID", jsessionid)
+                    bundle.putLong("userId", userData.id)
+                    bundle.putString("name", userData.name)
+                    bundle.putString("password", userData.password)
+                    bundle.putString("role", userData.role)
+                    bundle.putString("email", userData.email)
+                    bundle.putString("apiKey", userData.apiKey)
+                    activity.getDataFromBundle(bundle, true)
+                } else {
+                    activity.logOut()
+                }
+            } else if (activity is ArticleActivity) {
                 if (BuildConfig.DEBUG) {
-                    Log.d("LoginAsyncTask", "JSESSIONID = ${response.get("JSESSIONID").asString}")
+                    Log.d("MyLog:LoginAsyncTask", "Login from ArticleActivity")
                 }
-                val userData = Gson().fromJson(response.getAsJsonObject("user"), User::class.java)
-                loginActivity.openMainActivity(userData, response.get("JSESSIONID").asString)
-
-            } else {
-                if (response.get("error").asString!!.contentEquals("no user")) {
-                    nameTextInputEditText!!.setText("")
-                    passwordTextInputEditText!!.setText("")
-                    nameTextInputLayout!!.error = activity.getString(R.string.no_user)
-                } else if (response.get("error").asString!!.contentEquals("wrong password")) {
-                    passwordTextInputLayout!!.error = activity.getString(R.string.wrong_password)
-                    passwordTextInputEditText!!.setText("")
+                if (response.get("logged").asBoolean) {
+                    val bundle = Bundle()
+                    val jsessionid = response.get("JSESSIONID").asString!!
+                    val userData = Gson().fromJson(response.getAsJsonObject("user"), User::class.java)
+                    bundle.putString("JSESSIONID", jsessionid)
+                    bundle.putLong("userId", userData.id)
+                    bundle.putString("name", userData.name)
+                    bundle.putString("password", userData.password)
+                    bundle.putString("role", userData.role)
+                    bundle.putString("email", userData.email)
+                    bundle.putString("apiKey", userData.apiKey)
+                    activity.setUpUserData(bundle, true)
+                } else {
+                    activity.logOut()
                 }
-                progressBar!!.visibility = View.GONE
             }
-
         }
         super.onPostExecute(response)
     }

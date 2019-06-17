@@ -1,10 +1,9 @@
 package com.example.nasa_app.asynctasks
 
 import android.os.AsyncTask
+import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
-import com.example.nasa_app.Article
-import com.example.nasa_app.ArticlesRVAdapter
-import com.example.nasa_app.DBHelper
+import com.example.nasa_app.*
 import java.net.URL
 import java.util.concurrent.Semaphore
 import javax.net.ssl.HttpsURLConnection
@@ -16,7 +15,10 @@ class GetImageAsyncTask(
     private val semaphore: Semaphore,
     private val getArticleTasks: ArrayList<GetArticleAsyncTask>,
     private val getImageTasks: ArrayList<GetImageAsyncTask>,
-    private val swipeRefreshLayout: SwipeRefreshLayout
+    private val swipeRefreshLayout: SwipeRefreshLayout,
+    private val user: User,
+    private val update: Boolean = false,
+    private val fragment: Fragment? = null
 ) : AsyncTask<String, ByteArray?, ByteArray?>() {
 
     override fun doInBackground(vararg params: String?): ByteArray? {
@@ -33,8 +35,9 @@ class GetImageAsyncTask(
 
     override fun onPostExecute(result: ByteArray?) {
         article.drawable = result
-        dbHelper.insertArticle(article)
-        adapter.notifyDataSetChanged()
+        dbHelper.insertArticle(article, user)
+
+        adapter.sortNotify()
 
         semaphore.acquire()
         var done = true
@@ -54,7 +57,13 @@ class GetImageAsyncTask(
                 }
             }
         }
-        swipeRefreshLayout.isRefreshing = !done
+        if (update) {
+            if (fragment is LastArticlesFragment) {
+                fragment.getLastArticles(dbHelper)
+            }
+        } else {
+            swipeRefreshLayout.isRefreshing = !done
+        }
         semaphore.release()
         super.onPostExecute(result)
     }

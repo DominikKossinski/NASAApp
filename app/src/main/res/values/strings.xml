@@ -51,4 +51,13 @@
     <string name="date_sting">Date:</string>
     <string name="select_date">Select date:</string>
     <string name="already_exists">Article alredy exists</string>
+    <string name="delete">Delete</string>
+    <string name="success_full_saved">Successfull Saved</string>
+    <string name="error_by_saving">Error By Saving</string>
+    <string name="success_full_deleted">Succesfull Deleted</string>
+    <string name="error_by_deleting">Error by deleting</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="no_internet_message">No internet connection. Check connection and try later.</string>
+    <string name="logged_in">Logged in</string>
+    <string name="no_articles">No Articles</string>
 </resources>

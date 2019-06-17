@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.example.nasa_app.activities.MainActivity
@@ -17,7 +18,8 @@ import com.example.nasa_app.activities.MainActivity
 class ArticlesRVAdapter(
     var articles: ArrayList<Article>,
     private val activity: Activity,
-    private val swipeRefreshLayout: SwipeRefreshLayout
+    private val swipeRefreshLayout: SwipeRefreshLayout,
+    private val noArticlesLayout: LinearLayout
 ) :
     RecyclerView.Adapter<ArticlesRVAdapter.ArticleViewHolder>() {
     override fun onCreateViewHolder(parerent: ViewGroup, p1: Int): ArticleViewHolder {
@@ -49,13 +51,22 @@ class ArticlesRVAdapter(
         viewHolder.itemView.setOnClickListener {
             if (activity is MainActivity) {
                 if (swipeRefreshLayout.isRefreshing) {
-                    //TODO lepszy tekst
                     Toast.makeText(activity, activity.getString(R.string.is_refreshing), Toast.LENGTH_SHORT).show()
                 } else {
                     activity.openArticleActivity(article)
                 }
             }
         }
+    }
+
+    fun sortNotify() {
+        if (articles.size == 0) {
+            noArticlesLayout.visibility = View.VISIBLE
+        } else {
+            noArticlesLayout.visibility = View.GONE
+        }
+        articles.sort()
+        this.notifyDataSetChanged()
     }
 
     class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

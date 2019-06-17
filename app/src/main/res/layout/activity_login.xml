@@ -35,6 +35,7 @@
                     />
         </android.support.design.widget.TextInputLayout>
 
+
         <android.support.design.widget.TextInputLayout
                 android:id="@+id/passwordTextInputLayout"
                 app:passwordToggleEnabled="true"
@@ -42,6 +43,7 @@
                 style="@style/TextInputLayout"
                 app:hintTextAppearance="@style/HintTextInputLabelAppearance"
                 app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
+                app:passwordToggleTint="@color/white"
                 >
 
             <android.support.design.widget.TextInputEditText

@@ -12,4 +12,11 @@
             >
 
     </item>
+
+    <item
+            android:id="@+id/deleteArticle"
+            android:title="@string/delete"
+            android:icon="@drawable/ic_menu_delete"
+            app:showAsAction="ifRoom"
+            />
 </menu>

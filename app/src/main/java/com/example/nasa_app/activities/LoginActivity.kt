@@ -1,13 +1,16 @@
 package com.example.nasa_app.activities
 
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.content.res.Configuration
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import com.example.nasa_app.R
 import com.example.nasa_app.User
@@ -17,12 +20,48 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
+    private var connected = false
+    private var dialog: AlertDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpTheme()
         setContentView(R.layout.activity_login)
         setUpTextWatchers()
         setUpOnClickListeners()
+    }
+
+    private val netReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val connectivityManager = context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = connectivityManager.activeNetworkInfo
+            isConnected(networkInfo)
+        }
+
+    }
+
+    fun isConnected(networkInfo: NetworkInfo?) {
+        connected = networkInfo != null && networkInfo.isConnected
+        if (!connected) {
+            showNoInternetAlert()
+        } else if (connected && dialog != null) {
+            dialog!!.cancel()
+        }
+    }
+
+    private fun showNoInternetAlert() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.no_internet))
+        builder.setIcon(R.drawable.no_internet)
+        builder.setMessage(R.string.no_internet_message)
+        builder.setPositiveButton(getString(android.R.string.ok), object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+                this@LoginActivity.finish()
+            }
+
+        })
+        dialog = builder.create()
+        dialog!!.show()
     }
 
     private fun setUpTheme() {
@@ -48,7 +87,6 @@ class LoginActivity : AppCompatActivity() {
                 passwordTextInputLayout.error = getString(R.string.empty_password)
             }
             if (!password.equals("") and !name.equals("")) {
-                //Todo dodac alert ladowania
                 progressBar.visibility = View.VISIBLE
                 val gson = GsonBuilder().create()
                 val user = gson.toJson(User(0, name, password, null, "", null))
@@ -109,10 +147,15 @@ class LoginActivity : AppCompatActivity() {
         if (rememberMeCheckBox.isChecked) {
             editor.putString("name", user.name)
             editor.putString("password", passwordTextInputEditText.text.toString())
+            editor.putString("email", user.email)
+            editor.putLong("id", user.id)
+            Log.d("MyLog:LoginActivity", "Saving user: $user")
             editor.apply()
         } else {
             editor.putString("name", "")
             editor.putString("password", "")
+            editor.putString("email", "")
+            editor.putLong("id", -1)
             editor.apply()
         }
         val intent = Intent(this, MainActivity::class.java)
@@ -128,5 +171,15 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
         progressBar!!.visibility = View.GONE
         finish()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registerReceiver(netReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(netReceiver)
     }
 }
