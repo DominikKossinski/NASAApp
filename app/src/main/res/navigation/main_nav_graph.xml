@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/articlesFragment">
+
+    <fragment
+        android:id="@+id/articlesFragment"
+        android:name="com.example.nasa_app.fragments.articles.ArticlesFragment"
+        android:label="ArticlesFragment"
+        tools:layout="@layout/fragment_articles">
+
+        <action
+            android:id="@+id/showArticleAddDialog"
+            app:destination="@id/articleAddDialog" />
+
+        <action
+            android:id="@+id/goToArticle"
+            app:destination="@id/articleFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="com.example.nasa_app.fragments.article.ArticleFragment"
+        android:label="ArticleFragment"
+        tools:layout="@layout/fragment_article">
+
+        <argument
+            android:name="date"
+            app:argType="string" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/articleAddDialog"
+        android:name="com.example.nasa_app.dialogs.ArticleAddDialog"
+        android:label="ArticleAddDialog"
+        tools:layout="@layout/dialog_article_add" />
+
+</navigation>

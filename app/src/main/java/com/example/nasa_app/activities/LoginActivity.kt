@@ -6,19 +6,19 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.example.nasa_app.R
 import com.example.nasa_app.User
+import com.example.nasa_app.architecture.BaseActivity
 import com.example.nasa_app.asynctasks.LoginAsyncTask
+import com.example.nasa_app.databinding.ActivityLoginBinding
 import com.google.gson.GsonBuilder
-import kotlinx.android.synthetic.main.activity_login.*
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     private var connected = false
     private var dialog: AlertDialog? = null
@@ -77,33 +77,33 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setUpOnClickListeners() {
-        loginButton.setOnClickListener {
-            val name = nameTextInputEditText.text.toString()
-            val password = passwordTextInputEditText.text.toString()
+        binding.loginButton.setOnClickListener {
+            val name = binding.nameTextInputEditText.text.toString()
+            val password = binding.passwordTextInputEditText.text.toString()
             if (name.compareTo("") == 0) {
-                nameTextInputLayout.error = getString(R.string.empty_name)
+                binding.nameTextInputLayout.error = getString(R.string.empty_name)
             }
             if (password.contentEquals("")) {
-                passwordTextInputLayout.error = getString(R.string.empty_password)
+                binding.passwordTextInputLayout.error = getString(R.string.empty_password)
             }
             if (!password.equals("") and !name.equals("")) {
-                progressBar.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.VISIBLE
                 val gson = GsonBuilder().create()
                 val user = gson.toJson(User(0, name, password, null, "", null))
                 LoginAsyncTask(
-                    this, user, nameTextInputLayout, passwordTextInputLayout,
-                    nameTextInputEditText, passwordTextInputEditText, progressBar
+                    this, user, binding.nameTextInputLayout, binding.passwordTextInputLayout,
+                    binding.nameTextInputEditText, binding.passwordTextInputEditText, binding.progressBar
                 ).execute()
             }
         }
-        createAccountButton.setOnClickListener {
+        binding.createAccountButton.setOnClickListener {
             val intent = Intent(this, CreateAccountActivity::class.java)
             startActivity(intent)
         }
     }
 
     private fun setUpTextWatchers() {
-        nameTextInputEditText.addTextChangedListener(object : TextWatcher {
+        binding.nameTextInputEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -112,16 +112,16 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.toString().compareTo("") == 0) {
-                    if (!nameTextInputLayout.error.toString().contentEquals(getString(R.string.no_user))) {
-                        nameTextInputLayout.error = getString(R.string.empty_name)
+                    if (!binding.nameTextInputLayout.error.toString().contentEquals(getString(R.string.no_user))) {
+                        binding.nameTextInputLayout.error = getString(R.string.empty_name)
                     }
                 } else {
-                    nameTextInputLayout.error = null
+                    binding.nameTextInputLayout.error = null
                 }
             }
 
         })
-        passwordTextInputEditText.addTextChangedListener(object : TextWatcher {
+        binding.passwordTextInputEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -130,11 +130,11 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.toString().compareTo("") == 0) {
-                    if (!passwordTextInputLayout.error.toString().contentEquals(getString(R.string.wrong_password))) {
-                        passwordTextInputLayout.error = getString(R.string.empty_password)
+                    if (!binding.passwordTextInputLayout.error.toString().contentEquals(getString(R.string.wrong_password))) {
+                        binding.passwordTextInputLayout.error = getString(R.string.empty_password)
                     }
                 } else {
-                    passwordTextInputLayout.error = null
+                    binding.passwordTextInputLayout.error = null
                 }
             }
 
@@ -144,9 +144,9 @@ class LoginActivity : AppCompatActivity() {
     fun openMainActivity(user: User, jsessionid: String) {
         val preferences = getSharedPreferences("com.example.nasa_app.MyPref", Context.MODE_PRIVATE)
         val editor = preferences.edit()
-        if (rememberMeCheckBox.isChecked) {
+        if (binding.rememberMeCheckBox.isChecked) {
             editor.putString("name", user.name)
-            editor.putString("password", passwordTextInputEditText.text.toString())
+            editor.putString("password", binding.passwordTextInputEditText.text.toString())
             editor.putString("email", user.email)
             editor.putLong("id", user.id)
             Log.d("MyLog:LoginActivity", "Saving user: $user")
@@ -169,7 +169,7 @@ class LoginActivity : AppCompatActivity() {
         bundle.putString("apiKey", user.apiKey)
         intent.putExtras(bundle)
         startActivity(intent)
-        progressBar!!.visibility = View.GONE
+        binding.progressBar!!.visibility = View.GONE
         finish()
     }
 

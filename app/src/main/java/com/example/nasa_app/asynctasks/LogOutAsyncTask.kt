@@ -2,7 +2,6 @@ package com.example.nasa_app.asynctasks
 
 import android.os.AsyncTask
 import android.util.Log
-import com.example.nasa_app.AppService
 import com.example.nasa_app.BuildConfig
 import com.example.nasa_app.User
 import com.example.nasa_app.activities.LauncherActivity
@@ -80,7 +79,6 @@ class LogOutAsyncTask(
                         null, mainActivity.user!!.email, ""
                     )
                 }
-                AppService.jsessionid = ""
             }
         } else {
             if (BuildConfig.DEBUG) {

@@ -1,9 +1,11 @@
 package com.example.nasa_app.asynctasks
 
 import android.os.AsyncTask
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
+import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.nasa_app.*
+import com.example.nasa_app.fragments.articles.ArticlesFragment
+import com.example.nasa_app.fragments.articles.ArticlesRVAdapter
 import java.net.URL
 import java.util.concurrent.Semaphore
 import javax.net.ssl.HttpsURLConnection
@@ -13,7 +15,6 @@ class GetImageAsyncTask(
     private val article: Article,
     private val adapter: ArticlesRVAdapter,
     private val semaphore: Semaphore,
-    private val getArticleTasks: ArrayList<GetArticleAsyncTask>,
     private val getImageTasks: ArrayList<GetImageAsyncTask>,
     private val swipeRefreshLayout: SwipeRefreshLayout,
     private val user: User,
@@ -37,16 +38,16 @@ class GetImageAsyncTask(
         article.drawable = result
         dbHelper.insertArticle(article, user)
 
-        adapter.sortNotify()
+//        TODO adapter.sortNotify()
 
         semaphore.acquire()
         var done = true
-        for (task in getArticleTasks) {
-            if (task.status != Status.FINISHED) {
-                done = false
-                break
-            }
-        }
+//        for (task in getArticleTasks) {
+//            if (task.status != Status.FINISHED) {
+//                done = false
+//                break
+//            }
+//        }
         if (done) {
             for (task in getImageTasks) {
                 if (task != this) {
@@ -58,7 +59,7 @@ class GetImageAsyncTask(
             }
         }
         if (update) {
-            if (fragment is LastArticlesFragment) {
+            if (fragment is ArticlesFragment) {
                 fragment.getLastArticles(dbHelper)
             }
         } else {

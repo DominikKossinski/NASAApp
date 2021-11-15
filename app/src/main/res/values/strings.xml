@@ -60,4 +60,5 @@
     <string name="no_internet_message">No internet connection. Check connection and try later.</string>
     <string name="logged_in">Logged in</string>
     <string name="no_articles">No Articles</string>
+    <string name="add">Add</string>
 </resources>

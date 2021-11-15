@@ -10,16 +10,17 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import com.example.nasa_app.BuildConfig
 import com.example.nasa_app.R
 import com.example.nasa_app.User
+import com.example.nasa_app.architecture.BaseActivity
 import com.example.nasa_app.asynctasks.LoginAsyncTask
+import com.example.nasa_app.databinding.ActivityLauncherBinding
 import com.google.gson.GsonBuilder
 
-class LauncherActivity : AppCompatActivity() {
+class LauncherActivity : BaseActivity<ActivityLauncherBinding>() {
 
     var connected = false
 
@@ -68,11 +69,13 @@ class LauncherActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                if (connected || (name.compareTo("") != 0 && password.compareTo("") != 0 && !email.contentEquals("") && id != (-1).toLong())) {
-                    openNextActivity(name, password, email, id)
-                } else {
-                    openLoginActivity()
-                }
+                openMainActivity(User(1, "Name", "Password", null,  "Email", null), "")
+                //TODO
+//                if (connected || (name.compareTo("") != 0 && password.compareTo("") != 0 && !email.contentEquals("") && id != (-1).toLong())) {
+//                    openNextActivity(name, password, email, id)
+//                } else {
+//                    openLoginActivity()
+//                }
 
             }
 

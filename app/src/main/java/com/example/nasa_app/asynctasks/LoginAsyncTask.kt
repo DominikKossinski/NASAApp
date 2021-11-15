@@ -3,15 +3,14 @@ package com.example.nasa_app.asynctasks
 import android.app.Activity
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
-import android.support.design.widget.TextInputLayout
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import com.example.nasa_app.BuildConfig
 import com.example.nasa_app.R
 import com.example.nasa_app.User
-import com.example.nasa_app.activities.ArticleActivity
 import com.example.nasa_app.activities.LauncherActivity
 import com.example.nasa_app.activities.LoginActivity
 import com.example.nasa_app.activities.MainActivity
@@ -138,26 +137,28 @@ class LoginAsyncTask(
                 } else {
                     activity.logOut()
                 }
-            } else if (activity is ArticleActivity) {
-                if (BuildConfig.DEBUG) {
-                    Log.d("MyLog:LoginAsyncTask", "Login from ArticleActivity")
-                }
-                if (response.get("logged").asBoolean) {
-                    val bundle = Bundle()
-                    val jsessionid = response.get("JSESSIONID").asString!!
-                    val userData = Gson().fromJson(response.getAsJsonObject("user"), User::class.java)
-                    bundle.putString("JSESSIONID", jsessionid)
-                    bundle.putLong("userId", userData.id)
-                    bundle.putString("name", userData.name)
-                    bundle.putString("password", userData.password)
-                    bundle.putString("role", userData.role)
-                    bundle.putString("email", userData.email)
-                    bundle.putString("apiKey", userData.apiKey)
-                    activity.setUpUserData(bundle, true)
-                } else {
-                    activity.logOut()
-                }
             }
+            //TODO
+//            else if (activity is ArticleActivity) {
+//                if (BuildConfig.DEBUG) {
+//                    Log.d("MyLog:LoginAsyncTask", "Login from ArticleActivity")
+//                }
+//                if (response.get("logged").asBoolean) {
+//                    val bundle = Bundle()
+//                    val jsessionid = response.get("JSESSIONID").asString!!
+//                    val userData = Gson().fromJson(response.getAsJsonObject("user"), User::class.java)
+//                    bundle.putString("JSESSIONID", jsessionid)
+//                    bundle.putLong("userId", userData.id)
+//                    bundle.putString("name", userData.name)
+//                    bundle.putString("password", userData.password)
+//                    bundle.putString("role", userData.role)
+//                    bundle.putString("email", userData.email)
+//                    bundle.putString("apiKey", userData.apiKey)
+//                    activity.setUpUserData(bundle, true)
+//                } else {
+//                    activity.logOut()
+//                }
+//            }
         }
         super.onPostExecute(response)
     }

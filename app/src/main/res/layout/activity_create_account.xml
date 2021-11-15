@@ -1,114 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".activities.CreateAccountActivity"
-        android:fitsSystemWindows="true"
-        android:background="@mipmap/space"
-        >
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/space"
+    android:fitsSystemWindows="true"
+    tools:context=".activities.CreateAccountActivity">
 
     <ImageView
-            android:id="@+id/backImageView"
-            android:layout_width="@dimen/back_icon_size"
-            android:layout_height="@dimen/back_icon_size"
-            android:layout_margin="@dimen/margin_16dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:background="@drawable/ic_back_24dp"
-            android:contentDescription="@string/back"
-            />
+        android:id="@+id/backImageView"
+        android:layout_width="@dimen/back_icon_size"
+        android:layout_height="@dimen/back_icon_size"
+        android:layout_margin="@dimen/margin_16dp"
+        android:background="@drawable/ic_back_24dp"
+        android:contentDescription="@string/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin"
-            android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.design.widget.TextInputLayout
-                android:id="@+id/nameTextInputLayout"
-                android:hint="@string/user_name"
-                app:hintTextAppearance="@style/HintTextInputLabelAppearance"
-                app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
-                style="@style/TextInputLayout"
-                >
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameTextInputLayout"
+            style="@style/TextInputLayout"
+            android:hint="@string/user_name"
+            app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
+            app:hintTextAppearance="@style/HintTextInputLabelAppearance">
 
-            <android.support.design.widget.TextInputEditText
-                    android:id="@+id/nameTextInputEditText"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    style="@style/TextInputEditText"
-                    />
-        </android.support.design.widget.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameTextInputEditText"
+                style="@style/TextInputEditText"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-                android:id="@+id/emailTextInputLayout"
-                android:hint="@string/email"
-                app:hintTextAppearance="@style/HintTextInputLabelAppearance"
-                app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
-                style="@style/TextInputLayout"
-                >
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailTextInputLayout"
+            style="@style/TextInputLayout"
+            android:hint="@string/email"
+            app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
+            app:hintTextAppearance="@style/HintTextInputLabelAppearance">
 
-            <android.support.design.widget.TextInputEditText
-                    android:id="@+id/emailTextInputEditText"
-                    android:inputType="textEmailAddress"
-                    android:maxLength="40"
-                    android:maxEms="40"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    style="@style/TextInputEditText"
-                    />
-        </android.support.design.widget.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailTextInputEditText"
+                style="@style/TextInputEditText"
+                android:inputType="textEmailAddress"
+                android:maxEms="40"
+                android:maxLength="40"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-                android:id="@+id/passwordTextInputLayout"
-                app:passwordToggleEnabled="true"
-                android:hint="@string/password"
-                style="@style/TextInputLayout"
-                app:hintTextAppearance="@style/HintTextInputLabelAppearance"
-                app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
-                >
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordTextInputLayout"
+            style="@style/TextInputLayout"
+            android:hint="@string/password"
+            app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
+            app:hintTextAppearance="@style/HintTextInputLabelAppearance"
+            app:passwordToggleEnabled="true">
 
-            <android.support.design.widget.TextInputEditText
-                    android:id="@+id/passwordTextInputEditText"
-                    android:inputType="textPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/TextInputEditText"
-                    />
-        </android.support.design.widget.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordTextInputEditText"
+                style="@style/TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
-                android:id="@+id/acceptRulesCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/accept_rules"
-                android:buttonTint="@color/white"
-                android:textColor="@color/white"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                />
+            android:id="@+id/acceptRulesCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:text="@string/accept_rules"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/white" />
 
         <Button
-                android:id="@+id/createAccountButton"
-                style="@style/ButtonStyle"
-                android:text="@string/create_account"
-                />
+            android:id="@+id/createAccountButton"
+            style="@style/ButtonStyle"
+            android:text="@string/create_account" />
 
     </LinearLayout>
 
     <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="@dimen/progress_bar_size"
-            android:layout_height="@dimen/progress_bar_size"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
-</android.support.constraint.ConstraintLayout>
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/progress_bar_size"
+        android:layout_height="@dimen/progress_bar_size"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

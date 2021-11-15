@@ -3,8 +3,8 @@ package com.example.nasa_app.asynctasks
 import android.os.AsyncTask
 import com.example.nasa_app.Article
 import com.example.nasa_app.User
-import com.example.nasa_app.activities.ArticleActivity
 import com.example.nasa_app.activities.LauncherActivity
+import com.example.nasa_app.activities.MainActivity
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
@@ -19,7 +19,7 @@ import java.net.URL
 class SaveArticleAsyncTask(
     val user: User,
     val article: Article,
-    val activity: ArticleActivity,
+    val activity: MainActivity,
     val jsessionid: String
 ) : AsyncTask<String, String, JsonObject?>() {
     override fun doInBackground(vararg params: String?): JsonObject? {
@@ -65,7 +65,8 @@ class SaveArticleAsyncTask(
     }
 
     override fun onPostExecute(result: JsonObject?) {
-        activity.showSavingEnd(result!!.get("status").asString!!.contentEquals("ok"))
+        //TODO
+//        activity.showSavingEnd(result!!.get("status").asString!!.contentEquals("ok"))
         super.onPostExecute(result)
     }
 }

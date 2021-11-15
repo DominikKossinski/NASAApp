@@ -3,19 +3,19 @@ package com.example.nasa_app.activities
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.nasa_app.R
 import com.example.nasa_app.User
+import com.example.nasa_app.architecture.BaseActivity
 import com.example.nasa_app.asynctasks.CreateAccountAsyncTask
-import kotlinx.android.synthetic.main.activity_create_account.*
+import com.example.nasa_app.databinding.ActivityCreateAccountBinding
 
 
-class CreateAccountActivity : AppCompatActivity() {
+class CreateAccountActivity : BaseActivity<ActivityCreateAccountBinding>() {
 
     var nameOk = false
     var passwordOk = false
@@ -39,7 +39,7 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 
     private fun setUpTextWatchers() {
-        nameTextInputEditText.addTextChangedListener(object : TextWatcher {
+        binding.nameTextInputEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
             }
@@ -52,7 +52,7 @@ class CreateAccountActivity : AppCompatActivity() {
             }
 
         })
-        passwordTextInputEditText.addTextChangedListener(object : TextWatcher {
+        binding.passwordTextInputEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
@@ -65,7 +65,7 @@ class CreateAccountActivity : AppCompatActivity() {
             }
 
         })
-        emailTextInputEditText.addTextChangedListener(object : TextWatcher {
+        binding.emailTextInputEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
             }
@@ -82,61 +82,61 @@ class CreateAccountActivity : AppCompatActivity() {
 
     private fun validateName(name: CharSequence) {
         if (name.toString().contentEquals("")) {
-            nameTextInputLayout.error = getString(R.string.empty_name)
+            binding.nameTextInputLayout.error = getString(R.string.empty_name)
             nameOk = false
         } else if (!regex.matches(name.toString())) {
-            nameTextInputLayout.error = getString(R.string.name_invalid_characters)
+            binding.nameTextInputLayout.error = getString(R.string.name_invalid_characters)
             nameOk = false
         } else {
-            nameTextInputLayout.error = null
+            binding.nameTextInputLayout.error = null
             nameOk = true
         }
     }
 
     private fun validatePassword(password: CharSequence) {
         if (password.toString().contentEquals("")) {
-            passwordTextInputLayout.error = getString(R.string.empty_password)
+            binding.passwordTextInputLayout.error = getString(R.string.empty_password)
             passwordOk = false
         } else if (password.length < 8) {
-            passwordTextInputLayout.error = getString(R.string.to_short_password)
+            binding.passwordTextInputLayout.error = getString(R.string.to_short_password)
             passwordOk = false
         } else if (!regex.matches(password.toString())) {
-            passwordTextInputLayout.error = getString(R.string.password_invalid_characters)
+            binding.passwordTextInputLayout.error = getString(R.string.password_invalid_characters)
             passwordOk = false
         } else {
-            passwordTextInputLayout.error = null
+            binding.passwordTextInputLayout.error = null
             passwordOk = true
         }
     }
 
     private fun validateEmail(email: CharSequence) {
         if (email.toString().contentEquals("")) {
-            emailTextInputLayout.error = getString(R.string.empty_email)
+            binding.emailTextInputLayout.error = getString(R.string.empty_email)
             emailOk = false
         } else if (!isEmailValid(email.toString())) {
-            emailTextInputLayout.error = getString(R.string.not_email)
+            binding.emailTextInputLayout.error = getString(R.string.not_email)
             emailOk = false
         } else {
-            emailTextInputLayout.error = null
+            binding.emailTextInputLayout.error = null
             emailOk = true
         }
     }
 
     private fun setUpOnClickListeners() {
-        backImageView.setOnClickListener {
+        binding.backImageView.setOnClickListener {
             finish()
         }
 
-        createAccountButton.setOnClickListener {
-            val name = nameTextInputEditText.text.toString()
-            val email = emailTextInputEditText.text.toString()
-            val password = passwordTextInputEditText.text.toString()
+        binding.createAccountButton.setOnClickListener {
+            val name = binding.nameTextInputEditText.text.toString()
+            val email = binding.emailTextInputEditText.text.toString()
+            val password = binding.passwordTextInputEditText.text.toString()
             validateEmail(email)
             validateName(name)
             validatePassword(password)
-            if (acceptRulesCheckBox.isChecked) {
+            if (binding.acceptRulesCheckBox.isChecked) {
                 if (nameOk && passwordOk && emailOk) {
-                    progressBar.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.VISIBLE
                     val user = User(0, name, password, null, email, null)
                     CreateAccountAsyncTask(user, this).execute()
                 }
@@ -159,7 +159,7 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 
     fun showSuccessAlert(user: User) {
-        progressBar.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
         val builder = AlertDialog.Builder(this)
         builder.setCancelable(false)
         builder.setTitle(getString(R.string.success))
@@ -172,8 +172,8 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 
     fun showUserExistsError() {
-        progressBar.visibility = View.GONE
-        nameTextInputLayout.error = getString(R.string.user_exists)
+        binding.progressBar.visibility = View.GONE
+        binding.nameTextInputLayout.error = getString(R.string.user_exists)
     }
 
 }

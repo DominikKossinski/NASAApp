@@ -1,11 +1,13 @@
 package com.example.nasa_app.asynctasks
 
 import android.os.AsyncTask
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
+import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.nasa_app.*
 import com.example.nasa_app.activities.LauncherActivity
+import com.example.nasa_app.fragments.articles.ArticlesFragment
+import com.example.nasa_app.fragments.articles.ArticlesRVAdapter
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -18,7 +20,6 @@ import java.util.concurrent.Semaphore
 class GetSavedArticlesAsyncTask(
     val user: User, val jsessionid: String, val dbHelper: DBHelper, val fragment: Fragment,
     val semaphore: Semaphore,
-    val getArticleAsyncTasks: ArrayList<GetArticleAsyncTask>,
     val getImageAsyncTasks: ArrayList<GetImageAsyncTask>,
     val adapter: ArticlesRVAdapter,
     val swipeRefreshLayout: SwipeRefreshLayout
@@ -74,7 +75,11 @@ class GetSavedArticlesAsyncTask(
                     for (element in array) {
                         val article = gson.fromJson(element, Article::class.java)
                         article.saved = true
-                        if (dbHelper.existsArticle(DBHelper.simpleDateFormat.format(article.date), user)) {
+                        if (dbHelper.existsArticle(
+                                DBHelper.simpleDateFormat.format(article.date),
+                                user
+                            )
+                        ) {
                             dbHelper.updateArticle(article, user)
                         } else {
                             if (article.mediaType == ArticleMediaType.IMAGE) {
@@ -83,7 +88,6 @@ class GetSavedArticlesAsyncTask(
                                     article,
                                     adapter,
                                     semaphore,
-                                    getArticleAsyncTasks,
                                     getImageAsyncTasks,
                                     swipeRefreshLayout,
                                     user,
@@ -106,7 +110,7 @@ class GetSavedArticlesAsyncTask(
                         if (BuildConfig.DEBUG) {
                             Log.d("MyLog:GetSavedAsyncTask", "GetLastArticles")
                         }
-                        if (fragment is LastArticlesFragment) {
+                        if (fragment is ArticlesFragment) {
                             fragment.getLastArticles(dbHelper)
                         }
                     } else {
