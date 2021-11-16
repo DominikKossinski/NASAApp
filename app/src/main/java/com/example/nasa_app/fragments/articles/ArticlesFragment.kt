@@ -70,11 +70,11 @@ class ArticlesFragment : BaseFragment<ArticlesViewModel, FragmentArticlesBinding
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             adapter.loadStateFlow.collect {
                 if (it.refresh != LoadState.Loading) {
-                    binding.noArticlesLinearLayout.isVisible = adapter.itemCount == 0
+                    binding.noArticlesTextView.isVisible = adapter.itemCount == 0
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.articles.collectLatest {
                 adapter.submitData(it)
             }

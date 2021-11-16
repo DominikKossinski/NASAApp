@@ -28,16 +28,16 @@ class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>()
     override fun setupOnClickListeners() {
         binding.toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_back_24dp)
         binding.toolbar.inflateMenu(R.menu.menu_article)
-        //TODO hide saved
+        val menu = binding.toolbar.menu
+        menu?.findItem(R.id.saveArticle)?.isVisible = false
+        menu?.findItem(R.id.deleteArticle)?.isVisible = false
         binding.toolbar.setOnMenuItemClickListener {
             when(it.itemId) {
                 R.id.saveArticle -> {
-                    //TODO SaveArticleAsyncTask
-                    true
+                    viewModel.saveArticle()
                 }
                 R.id.deleteArticle -> {
-                    //TODO DeleteArticleAsyncTask
-                    false
+                    viewModel.deleteArticle()
                 }
             }
             false
@@ -51,13 +51,19 @@ class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>()
         super.collectFlow()
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.article.collect {
-                Log.d("MyLog", "Article: $it")
                 it?.let { setupArticleData(it) }
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.isLoadingData.collect {
                 binding.progressBar.isVisible = it
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.savedArticle.collect {
+                val menu = binding.toolbar.menu
+                menu?.findItem(R.id.saveArticle)?.isVisible = it == null
+                menu?.findItem(R.id.deleteArticle)?.isVisible = it != null
             }
         }
     }
@@ -71,18 +77,22 @@ class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>()
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.url))
             startActivity(intent)
         }
-        if (article.mediaType == NasaArticle.NasaMediaType.IMAGE) {
-            val simpleTarget =
-                object : SimpleTarget<Drawable>() {
-                    override fun onResourceReady(
-                        resource: Drawable,
-                        transition: Transition<in Drawable>?
-                    ) {
-                        binding.collapsingToolbarLayout.background = resource
-                    }
+        val simpleTarget =
+            object : SimpleTarget<Drawable>() {
+                override fun onResourceReady(
+                    resource: Drawable,
+                    transition: Transition<in Drawable>?
+                ) {
+                    binding.collapsingToolbarLayout.background = resource
                 }
+            }
+        if (article.mediaType == NasaArticle.NasaMediaType.IMAGE) {
             Glide.with(requireContext())
                 .load(article.hdurl)
+                .into(simpleTarget)
+        } else {
+            Glide.with(requireContext())
+                .load(R.mipmap.space)
                 .into(simpleTarget)
         }
     }

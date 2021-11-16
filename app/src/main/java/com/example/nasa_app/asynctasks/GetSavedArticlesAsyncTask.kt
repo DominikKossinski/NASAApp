@@ -7,7 +7,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.nasa_app.*
 import com.example.nasa_app.activities.LauncherActivity
 import com.example.nasa_app.fragments.articles.ArticlesFragment
-import com.example.nasa_app.fragments.articles.ArticlesRVAdapter
+import com.example.nasa_app.fragments.saved_articles.adapter.ArticlesRVAdapter
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject

@@ -1,4 +1,4 @@
-package com.example.nasa_app.fragments.articles
+package com.example.nasa_app.fragments.saved_articles.adapter
 
 import com.bumptech.glide.Glide
 import com.example.nasa_app.DBHelper

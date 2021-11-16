@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.nasa_app.*
 import com.example.nasa_app.fragments.articles.ArticlesFragment
-import com.example.nasa_app.fragments.articles.ArticlesRVAdapter
+import com.example.nasa_app.fragments.saved_articles.adapter.ArticlesRVAdapter
 import java.net.URL
 import java.util.concurrent.Semaphore
 import javax.net.ssl.HttpsURLConnection

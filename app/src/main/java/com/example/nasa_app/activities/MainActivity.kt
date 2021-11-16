@@ -14,6 +14,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
 import com.example.nasa_app.*
 import com.example.nasa_app.architecture.BaseActivity
 import com.example.nasa_app.databinding.ActivityMainBinding
@@ -126,7 +127,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         // TODO Inflate the menu; this adds items to the action bar if it is present.
 //        menuInflater.inflate(R.menu.main, menu)
 //        this.menu = menu
-//        val myActionMenuItem = menu.findItem(R.id.action_search)
+        val myActionMenuItem = menu.findItem(R.id.action_search)
         //TODO
 //        val searchView = myActionMenuItem.actionView as SearchView
 //        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -164,9 +165,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_last_articles -> {
-                //TODO
-                // Handle the camera action
+            R.id.nav_articles -> {
+                findNavController(R.id.mainNavHostFragment).navigate(MainNavGraphDirections.toArticles())
+            }
+            R.id.nav_saved_articles -> {
+                findNavController(R.id.mainNavHostFragment).navigate(MainNavGraphDirections.toSavedArticles())
             }
             R.id.nav_logout -> {
                 logOut()

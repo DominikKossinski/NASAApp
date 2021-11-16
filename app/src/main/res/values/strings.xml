@@ -7,14 +7,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
-    <string name="communicate">Communicate</string>
-
     <string name="title_activity_article">ArticleActivity</string>
     <string name="watch_now">Watch now!</string>
     <string name="remember_me">Remember ME</string>
@@ -46,8 +38,16 @@
     <string name="to_long_password">Password is too long</string>
     <string name="user_exists">User exists</string>
     <string name="account">Account</string>
-    <string name="menu_last_articles">Last Articles</string>
-    <string name="menu_my_articles">My Articles</string>
+
+    <string name="article_saved">Article saved</string>
+    <string name="article_deleted">Article deleted</string>
+    <string name="article_not_found">Article not found</string>
+
+
+    <string name="menu_articles">Articles</string>
+    <string name="menu_saved_articles">Saved Articles</string>
+
+
     <string name="date_sting">Date:</string>
     <string name="select_date">Select article date</string>
     <string name="already_exists">Article alredy exists</string>
