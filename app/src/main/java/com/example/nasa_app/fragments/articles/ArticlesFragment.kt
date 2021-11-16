@@ -5,6 +5,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nasa_app.BuildConfig
 import com.example.nasa_app.DBHelper
@@ -18,6 +19,7 @@ import com.example.nasa_app.extensions.toDateString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 
 
 @AndroidEntryPoint
@@ -36,18 +38,18 @@ class ArticlesFragment : BaseFragment<ArticlesViewModel, FragmentArticlesBinding
         val searchView = searchItem.actionView as? SearchView
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-//                TODO("Not yet implemented")
+                viewModel.setSearchQuery(query ?: "")
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-//                TODO("Not yet implemented")
+                viewModel.setSearchQuery(newText ?: "")
                 return true
             }
 
         })
         binding.articlesSwipeRefreshLayout.setOnRefreshListener {
-            viewModel.fetchArticles()
+            adapter.refresh()
         }
         binding.fab.setOnClickListener {
             showArticleAddDialog()
@@ -56,9 +58,9 @@ class ArticlesFragment : BaseFragment<ArticlesViewModel, FragmentArticlesBinding
     }
 
     private fun setupRecyclerView() {
-//        adapter.setOnItemClickListener { article ->
-//            viewModel.navigateToArticle(article.date.toDateString())
-//        }
+        adapter.setOnItemClickListener { article ->
+            viewModel.navigateToArticle(article.date.toDateString())
+        }
         binding.articlesRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.articlesRecyclerView.adapter = adapter
     }
@@ -66,18 +68,17 @@ class ArticlesFragment : BaseFragment<ArticlesViewModel, FragmentArticlesBinding
     override fun collectFlow() {
         super.collectFlow()
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.getArticles().collectLatest {
+            adapter.loadStateFlow.collect {
+                if (it.refresh != LoadState.Loading) {
+                    binding.noArticlesLinearLayout.isVisible = adapter.itemCount == 0
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.articles.collectLatest {
                 adapter.submitData(it)
             }
         }
-//        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-//            viewModel.articles.collect {
-//                adapter.items.clear()
-//                adapter.items.addAll(it)
-//                binding.noArticlesLinearLayout.isVisible = it.isEmpty()
-//                adapter.notifyDataSetChanged()
-//            }
-//        }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.isLoadingData.collect {
                 binding.articlesSwipeRefreshLayout.isRefreshing = it

@@ -12,6 +12,8 @@ abstract class BasePagingDataAdapter<T : Any, VB : ViewBinding>(
     itemCallback: DiffUtil.ItemCallback<T>
 ) : PagingDataAdapter<T, BaseRecyclerViewAdapter.BaseViewHolder<VB>>(itemCallback) {
 
+    protected var onClickListener: ((T) -> Unit)? = null
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -26,5 +28,10 @@ abstract class BasePagingDataAdapter<T : Any, VB : ViewBinding>(
         )
         val binding = method.invoke(null, LayoutInflater.from(parent.context), parent, false) as VB
         return BaseRecyclerViewAdapter.BaseViewHolder(binding.root, binding)
+    }
+
+
+    fun setOnItemClickListener(listener: ((T) -> Unit)?) {
+        onClickListener = listener
     }
 }

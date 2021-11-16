@@ -34,7 +34,7 @@ class ArticlesPagingAdapter :
                 .into(holder.binding.rowImageView)
         }
         holder.binding.root.setOnClickListener {
-//            onClickListener?.invoke(article) // TODO
+            onClickListener?.invoke(article)
         }
     }
 

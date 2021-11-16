@@ -34,8 +34,14 @@
 
     <dialog
         android:id="@+id/articleAddDialog"
-        android:name="com.example.nasa_app.dialogs.ArticleAddDialog"
+        android:name="com.example.nasa_app.dialogs.ArticleFromDateDialog"
         android:label="ArticleAddDialog"
-        tools:layout="@layout/dialog_article_add" />
+        tools:layout="@layout/dialog_article_from_date">
+
+        <action
+            android:id="@+id/goToArticle"
+            app:destination="@id/articleFragment"
+            app:popUpTo="@id/articlesFragment" />
+    </dialog>
 
 </navigation>
