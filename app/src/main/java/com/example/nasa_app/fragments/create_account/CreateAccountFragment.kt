@@ -1,4 +1,4 @@
-package com.example.nasa_app.activities
+package com.example.nasa_app.fragments.create_account
 
 import android.content.res.Configuration
 import android.graphics.Color
@@ -7,15 +7,21 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.viewModels
 import com.example.nasa_app.R
-import com.example.nasa_app.User
-import com.example.nasa_app.architecture.BaseActivity
-import com.example.nasa_app.asynctasks.CreateAccountAsyncTask
-import com.example.nasa_app.databinding.ActivityCreateAccountBinding
+import com.example.nasa_app.api.models.ApiError
+import com.example.nasa_app.architecture.BaseFragment
+import com.example.nasa_app.databinding.FragmentCreateAccountBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
+class CreateAccountFragment : BaseFragment<CreateAccountViewModel, FragmentCreateAccountBinding>() {
 
-class CreateAccountActivity : BaseActivity<ActivityCreateAccountBinding>() {
+    override val viewModel: CreateAccountViewModel by viewModels()
+
+    override fun handleApiError(apiError: ApiError) {
+        TODO("Not yet implemented")
+    }
 
     var nameOk = false
     var passwordOk = false
@@ -27,15 +33,6 @@ class CreateAccountActivity : BaseActivity<ActivityCreateAccountBinding>() {
 
     private fun isEmailValid(email: CharSequence): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setUpTheme()
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_account)
-
-        setUpOnClickListeners()
-        setUpTextWatchers()
     }
 
     private fun setUpTextWatchers() {
@@ -122,9 +119,10 @@ class CreateAccountActivity : BaseActivity<ActivityCreateAccountBinding>() {
         }
     }
 
-    private fun setUpOnClickListeners() {
+    override fun setupOnClickListeners() {
+        super.setupOnClickListeners()
         binding.backImageView.setOnClickListener {
-            finish()
+            viewModel.navigateBack()
         }
 
         binding.createAccountButton.setOnClickListener {
@@ -137,39 +135,34 @@ class CreateAccountActivity : BaseActivity<ActivityCreateAccountBinding>() {
             if (binding.acceptRulesCheckBox.isChecked) {
                 if (nameOk && passwordOk && emailOk) {
                     binding.progressBar.visibility = View.VISIBLE
-                    val user = User(0, name, password, null, email, null)
-                    CreateAccountAsyncTask(user, this).execute()
+                    //TODO
+//                    val user = User(0, name, password, null, email, null)
+//                    CreateAccountAsyncTask(user, this).execute()
                 }
             } else {
-                Toast.makeText(this, getString(R.string.accept_rules), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.accept_rules),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
-    private fun setUpTheme() {
-        val nightModeFlags = this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-            setTheme(R.style.NightTheme_NoActionBar)
-        } else {
-            setTheme(R.style.AppTheme_NoActionBar)
-        }
-        window.decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        window.statusBarColor = Color.TRANSPARENT
-    }
 
-    fun showSuccessAlert(user: User) {
-        binding.progressBar.visibility = View.GONE
-        val builder = AlertDialog.Builder(this)
-        builder.setCancelable(false)
-        builder.setTitle(getString(R.string.success))
-        builder.setIcon(getDrawable(R.drawable.ic_user))
-        builder.setMessage(String.format(getString(R.string.user_created), user.name))
-        builder.setPositiveButton(
-            getString(android.R.string.ok)
-        ) { _, _ -> finish() }
-        builder.create().show()
-    }
+//    TODO
+//    fun showSuccessAlert(user: User) {
+//        binding.progressBar.visibility = View.GONE
+//        val builder = AlertDialog.Builder(this)
+//        builder.setCancelable(false)
+//        builder.setTitle(getString(R.string.success))
+//        builder.setIcon(getDrawable(R.drawable.ic_user))
+//        builder.setMessage(String.format(getString(R.string.user_created), user.name))
+//        builder.setPositiveButton(
+//            getString(android.R.string.ok)
+//        ) { _, _ -> finish() }
+//        builder.create().show()
+//    }
 
     fun showUserExistsError() {
         binding.progressBar.visibility = View.GONE

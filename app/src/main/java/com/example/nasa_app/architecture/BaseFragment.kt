@@ -68,7 +68,6 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
 //        }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.backFlow.collect {
-                Log.d("MyLog", "Collecting back navigation")
                 when (findNavController().graph.id) {
                     R.id.main_nav_graph -> {
                         Navigation.findNavController(
@@ -77,55 +76,36 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
                         )
                             .popBackStack()
                     }
-//                    TODO
-//                    R.id.lists_nav_graph -> {
-//                        Navigation.findNavController(
-//                            requireActivity(),
-//                            R.id.listsNavHostFragment
-//                        )
-//                            .popBackStack()
-//                    }
-//                    R.id.login_nav_graph -> {
-//                        Navigation.findNavController(
-//                            requireActivity(),
-//                            R.id.login_nav_host_fragment
-//                        ).popBackStack()
-//                    }
+                    R.id.login_nav_graph -> {
+                        Navigation.findNavController(
+                            requireActivity(),
+                            R.id.loginNavHostFragment
+                        ).popBackStack()
+                    }
                 }
 
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.getNavDirectionsFlow().collect {
-                Log.d("MyLog", "Collecting navigation")
-                Log.d("MyLog", "${findNavController().currentDestination?.label}")
                 when (findNavController().graph.id) {
                     R.id.main_nav_graph -> {
-                        Log.d("MyLog", "MainGraph $it")
                         Navigation.findNavController(
                             requireActivity(),
                             R.id.mainNavHostFragment
-                        )
-                            .navigate(it)
+                        ).navigate(it)
                     }
-//                    TODO
-//                    R.id.lists_nav_graph -> {
-//                        Log.d("MyLog", "ListGraph $it")
-//                        Navigation.findNavController(
-//                            requireActivity(),
-//                            R.id.mainNavHostFragment
-//                        )
-//                            .navigate(it)
-//                    }
-//                    R.id.login_nav_graph -> {
-//                        findNavController().navigate(it)
-//                    }
+                    R.id.login_nav_graph -> {
+                        Navigation.findNavController(
+                            requireActivity(),
+                            R.id.loginNavHostFragment
+                        ).navigate(it)
+                    }
                 }
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.toastMessage.collect {
-                Log.d("MyLog", "Collecting error: $it")
                 it?.let {
                     Toast.makeText(context, it, Toast.LENGTH_LONG).show()
                 }

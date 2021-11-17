@@ -1,15 +1,13 @@
 package com.example.nasa_app.fragments.articles
 
-import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.Glide
-import com.example.nasa_app.DBHelper
 import com.example.nasa_app.R
 import com.example.nasa_app.api.nasa.NasaArticle
 import com.example.nasa_app.architecture.BasePagingDataAdapter
 import com.example.nasa_app.architecture.BaseRecyclerViewAdapter
 import com.example.nasa_app.databinding.ItemArticleBinding
+import com.example.nasa_app.extensions.toDateString
 
 class ArticlesPagingAdapter :
     BasePagingDataAdapter<NasaArticle, ItemArticleBinding>(
@@ -22,7 +20,7 @@ class ArticlesPagingAdapter :
     ) {
         val article = getItem(position) ?: return
         holder.binding.titleTextView.text = article.title
-        holder.binding.dateTextView.text = DBHelper.simpleDateFormat.format(article.date)
+        holder.binding.dateTextView.text = article.date.toDateString()
         if (article.mediaType == NasaArticle.NasaMediaType.IMAGE) {
             Glide.with(holder.itemView)
                 .load(article.hdurl)

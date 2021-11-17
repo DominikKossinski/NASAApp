@@ -47,6 +47,8 @@
     <string name="menu_articles">Articles</string>
     <string name="menu_saved_articles">Saved Articles</string>
 
+    <string name="unexpected_error">Unexpected Error</string>
+
 
     <string name="date_sting">Date:</string>
     <string name="select_date">Select article date</string>

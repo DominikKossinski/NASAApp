@@ -26,48 +26,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(),
     NavigationView.OnNavigationItemSelectedListener {
 
-    private var dbHelper: DBHelper? = null
-    var user: User? = null
-    var connected = false
-
-    private val netReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val connectivityManager =
-                context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val networkInfo = connectivityManager.activeNetworkInfo
-            isConnected(networkInfo)
-        }
-
-    }
-
-    fun isConnected(networkInfo: NetworkInfo?) {
-        connected = networkInfo != null && networkInfo.isConnected
-        //TODO
-//        if (fragment != null) {
-//            fragment!!.setConnectedNet(connected)
-//        }
-        if (!connected) {
-            //TODO
-            //Snackbar.make(binding.fab, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
-        } else {
-            if (user!!.apiKey!!.contentEquals("")) {
-                if (BuildConfig.DEBUG) {
-                    Log.d("MyLog:MainActivity", "Login from MainActivity")
-                }
-//              TODO  LoginAsyncTask(this, userData).execute()
-            }
-        }
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dbHelper = DBHelper(this)
-
-        val bundle = intent.extras
-        if (bundle != null) {
-            getDataFromBundle(bundle)
-        }
 
         binding.navView.setNavigationItemSelectedListener(this)
 
@@ -90,30 +50,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
 
     }
 
-    fun getDataFromBundle(bundle: Bundle, login: Boolean = false) {
-        if (BuildConfig.DEBUG) {
-            Log.d("MyLog:MainActivity", "getDataFromBundle(login = $login)")
-        }
-        val id = bundle.getLong("userId", 0)
-        val name = bundle.getString("name", "")
-        val password = bundle.getString("password", "")
-        val role = bundle.getString("role", "")
-        val email = bundle.getString("email", "")
-        val apiKey = bundle.getString("apiKey", "")
-        user = User(id, name, password, role, email, apiKey)
-        if (BuildConfig.DEBUG) {
-            Log.d("MyLog:MainActivity", "getDataFromBundle(user = $user)")
-        }
-        if (login) {
-            if (connected) {
-                //TODO fragment!!.setConnectedNet(connected)
-            }
-            //TODO
-            //Snackbar.make(binding.fab, getString(R.string.logged_in), Snackbar.LENGTH_LONG).show()
-        }
-    }
-
-
     override fun onBackPressed() {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -123,47 +59,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // TODO Inflate the menu; this adds items to the action bar if it is present.
-//        menuInflater.inflate(R.menu.main, menu)
-//        this.menu = menu
-        val myActionMenuItem = menu.findItem(R.id.action_search)
-        //TODO
-//        val searchView = myActionMenuItem.actionView as SearchView
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(pattern: String?): Boolean {
-//                if (BuildConfig.DEBUG) {
-//                    Log.d("MainActivity", "Querry: '${pattern!!}'")
-//                }
-//                if (lastFragment is LastArticlesFragment) {
-//                    val lastArticlesFragment = lastFragment as LastArticlesFragment
-//                    lastArticlesFragment.adapter!!.articles =
-//                        dbHelper!!.getArticlesByPattern(pattern!!.toLowerCase(), user!!)
-//                    lastArticlesFragment.adapter!!.sortNotify()
-//                }
-//                return true
-//            }
-//
-//            override fun onQueryTextChange(pattern: String?): Boolean {
-//                if (BuildConfig.DEBUG) {
-//                    Log.d("MainActivity", "Querry: '${pattern!!}'")
-//                }
-//                if (lastFragment is LastArticlesFragment) {
-//                    val lastArticlesFragment = lastFragment as LastArticlesFragment
-//                    lastArticlesFragment.adapter!!.articles =
-//                        dbHelper!!.getArticlesByPattern(pattern!!.toLowerCase(), user!!)
-//                    lastArticlesFragment.adapter!!.sortNotify()
-//                }
-//                return true
-//            }
-//
-//        })
-        return super.onCreateOptionsMenu(menu)
-    }
-
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_articles -> {
                 findNavController(R.id.mainNavHostFragment).navigate(MainNavGraphDirections.toArticles())
@@ -198,55 +95,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
 
     }
 
-    private fun openLoginActivity() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
-    fun getArticleByDate(date: String) {
-        //TODO
-//        if (!dbHelper!!.existsArticle(date, user!!)) {
-//            if (fragment is ArticlesFragment) {
-//                (fragment as ArticlesFragment).getArticleByDate(date, dbHelper!!, user!!)
-//            }
-//        } else {
-//            Snackbar.make(findViewById(R.id.main), R.string.already_exists, Snackbar.LENGTH_SHORT)
-//                .show()
-//        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        registerReceiver(netReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-    }
-
-    override fun onPause() {
-        super.onPause()
-        unregisterReceiver(netReceiver)
-    }
-
-    override fun onDestroy() {
-        if (BuildConfig.DEBUG) {
-            Log.d("MyLog:MainActivity", "onDestroy(1)")
-        }
-        /*  if(jsessionid!!.contentEquals("")) {
-            Log.d("MyLog:MainActivity", "onDestroy(1)")
-            super.onDestroy()
-        } else {
-            if(connected) {
-                val semaphore = Semaphore(1)
-                semaphore.acquire()
-                LogOutAsyncTask(jsessionid!!, this, semaphore).execute()
-                semaphore.acquire()
-                Log.d("MyLog:MainActivity", "onDestroy(2)")
-                super.onDestroy()
-            } else {
-                Log.d("MyLog:MainActivity", "onDestroy(3)")
-                super.onDestroy()
-            }
-        }*/
-        super.onDestroy()
-
-    }
 }

@@ -75,4 +75,12 @@
         android:id="@+id/toSavedArticles"
         app:destination="@id/savedArticlesFragment"
         app:popUpTo="@id/articlesFragment" />
+
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.example.nasa_app.activities.LoginActivity" />
+
+    <action
+        android:id="@+id/goToLoginActivity"
+        app:destination="@id/loginActivity" />
 </navigation>

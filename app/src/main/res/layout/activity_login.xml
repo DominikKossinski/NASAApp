@@ -4,79 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/space"
     android:fitsSystemWindows="true"
     tools:context=".activities.LoginActivity">
 
-    <LinearLayout
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/loginNavHostFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nameTextInputLayout"
-            style="@style/TextInputLayout"
-            android:hint="@string/user_name"
-            app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
-            app:hintTextAppearance="@style/HintTextInputLabelAppearance">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nameTextInputEditText"
-                style="@style/TextInputEditText" />
-        </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/login_nav_graph" />
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passwordTextInputLayout"
-            style="@style/TextInputLayout"
-            android:hint="@string/password"
-            app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
-            app:hintTextAppearance="@style/HintTextInputLabelAppearance"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/white">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordTextInputEditText"
-                style="@style/TextInputEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <CheckBox
-            android:id="@+id/rememberMeCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/white"
-            android:text="@string/remember_me"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/loginButton"
-            style="@style/ButtonStyle"
-            android:text="@string/login" />
-
-        <Button
-            android:id="@+id/createAccountButton"
-            style="@style/ButtonStyle"
-            android:text="@string/create_account" />
-
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="@dimen/progress_bar_size"
-        android:layout_height="@dimen/progress_bar_size"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
