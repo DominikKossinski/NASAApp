@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/articlesFragment">
+
+    <fragment
+        android:id="@+id/articlesFragment"
+        android:name="com.example.nasa_app.fragments.articles.ArticlesFragment"
+        android:label="ArticlesFragment"
+        tools:layout="@layout/fragment_articles">
+
+        <action
+            android:id="@+id/showArticleAddDialog"
+            app:destination="@id/articleAddDialog" />
+
+        <action
+            android:id="@+id/goToArticle"
+            app:destination="@id/articleFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="com.example.nasa_app.fragments.article.ArticleFragment"
+        android:label="ArticleFragment"
+        tools:layout="@layout/fragment_article">
+
+        <argument
+            android:name="date"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/savedArticlesFragment"
+        android:name="com.example.nasa_app.fragments.saved_articles.SavedArticlesFragment"
+        android:label="SavedArticlesFragment"
+        tools:layout="@layout/fragment_saved_articles">
+
+        <action
+            android:id="@+id/goToSavedArticle"
+            app:destination="@id/savedArticleFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/savedArticleFragment"
+        android:name="com.example.nasa_app.fragments.saved_article.SavedArticleFragment"
+        android:label="SavedArticleFragment"
+        tools:layout="@layout/fragment_saved_article">
+
+        <argument
+            android:name="date"
+            app:argType="string" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/articleAddDialog"
+        android:name="com.example.nasa_app.dialogs.ArticleFromDateDialog"
+        android:label="ArticleAddDialog"
+        tools:layout="@layout/dialog_article_from_date">
+
+        <action
+            android:id="@+id/goToArticle"
+            app:destination="@id/articleFragment"
+            app:popUpTo="@id/articlesFragment" />
+    </dialog>
+
+    <action
+        android:id="@+id/toArticles"
+        app:popUpTo="@id/articlesFragment" />
+
+    <action
+        android:id="@+id/toSavedArticles"
+        app:destination="@id/savedArticlesFragment"
+        app:popUpTo="@id/articlesFragment" />
+
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.example.nasa_app.activities.LoginActivity" />
+
+    <action
+        android:id="@+id/goToLoginActivity"
+        app:destination="@id/loginActivity" />
+</navigation>
