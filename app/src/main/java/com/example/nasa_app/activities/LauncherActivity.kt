@@ -3,6 +3,7 @@ package com.example.nasa_app.activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import com.example.nasa_app.activities.main.MainActivity
 import com.example.nasa_app.architecture.BaseActivity
 import com.example.nasa_app.databinding.ActivityLauncherBinding
 
@@ -18,26 +19,21 @@ class LauncherActivity : BaseActivity<ActivityLauncherBinding>() {
             }
 
             override fun onFinish() {
-                openLoginActivity()
-//                openMainActivity()
+                openNextActivity()
             }
 
         }
         countDownTimer.start()
     }
 
-
-    fun openMainActivity() {
-        //TODO move to navigation
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
-    fun openLoginActivity() {
-        //TODO move to navigation
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
+    private fun openNextActivity() {
+        if (currentUser == null || !currentUser.isEmailVerified) {
+            firebaseAuth.signOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        } else {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
     }
 }

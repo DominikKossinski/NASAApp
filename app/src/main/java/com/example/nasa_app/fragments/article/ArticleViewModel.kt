@@ -11,15 +11,17 @@ import com.example.nasa_app.room.AppDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import pl.kossa.myflights.architecture.BaseViewModel
+import com.example.nasa_app.architecture.BaseViewModel
+import com.example.nasa_app.utils.PreferencesHelper
 import javax.inject.Inject
 
 @HiltViewModel
 class ArticleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val nasaService: NasaService,
-    private val appDatabase: AppDatabase
-) : BaseViewModel() {
+    private val appDatabase: AppDatabase,
+    preferencesHelper: PreferencesHelper
+) : BaseViewModel(preferencesHelper) {
 
     val date = savedStateHandle.get<String>("date")!!
 

@@ -17,20 +17,21 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nameTextInputLayout"
+            android:id="@+id/emailTil"
             style="@style/TextInputLayout"
-            android:hint="@string/user_name"
+            android:hint="@string/email"
             app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
             app:hintTextAppearance="@style/HintTextInputLabelAppearance">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nameTextInputEditText"
-                style="@style/TextInputEditText" />
+                android:id="@+id/emailTie"
+                style="@style/TextInputEditText"
+                android:imeOptions="actionNext" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passwordTextInputLayout"
+            android:id="@+id/passwordTil"
             style="@style/TextInputLayout"
             android:hint="@string/password"
             app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
@@ -39,10 +40,11 @@
             app:passwordToggleTint="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordTextInputEditText"
+                android:id="@+id/passwordTie"
                 style="@style/TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 

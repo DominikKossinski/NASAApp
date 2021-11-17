@@ -18,36 +18,40 @@
     <string name="search">Search</string>
     <string name="password">Password</string>
     <string name="user_name">User Name</string>
-    <string name="no_user">No user with this name</string>
-    <string name="wrong_password">Wrong password</string>
+
     <string name="create_account">Create Account</string>
     <string name="empty_name">Empty name</string>
-    <string name="empty_password">Empty password</string>
-    <string name="accept_rules">Accept Rules</string>
+    <string name="accept_regulations">I accept regulations</string>
     <string name="back">Back</string>
     <string name="email">Email</string>
-    <string name="empty_email">Empty Email</string>
     <string name="to_short_password">To short password</string>
     <string name="success">Success!</string>
     <string name="user_created">User %s created. Now you can login to our app :)</string>
-    <string name="invalid_characters">Name contains invalid characters</string>
-    <string name="name_invalid_characters">Name contains invalid characters</string>
-    <string name="password_invalid_characters">Password contains invalid characters</string>
-    <string name="not_email">It isn\'t email</string>
     <string name="name_to_long">User name is to long</string>
     <string name="to_long_password">Password is too long</string>
-    <string name="user_exists">User exists</string>
     <string name="account">Account</string>
 
     <string name="article_saved">Article saved</string>
     <string name="article_deleted">Article deleted</string>
     <string name="article_not_found">Article not found</string>
 
+    <string name="email_resent">Email sent</string>
+
 
     <string name="menu_articles">Articles</string>
     <string name="menu_saved_articles">Saved Articles</string>
 
     <string name="unexpected_error">Unexpected Error</string>
+    <string name="empty_password_error">Empty password</string>
+    <string name="no_user_error">No user</string>
+    <string name="not_email_error">It isn\'t an email</string>
+    <string name="empty_email_error">Empty Email</string>
+    <string name="wrong_password_error">Wrong password</string>
+    <string name="user_exists_error">User exists</string>
+    <string name="no_internet_error">No internet</string>
+    <string name="password_not_matches_error">Password doesn\'t match</string>
+    <string name="to_weak_password_error">Ad least 6 characters</string>
+
 
 
     <string name="date_sting">Date:</string>
@@ -63,4 +67,7 @@
     <string name="logged_in">Logged in</string>
     <string name="no_articles">No Articles</string>
     <string name="open_article">Open article</string>
+    <string name="email_resend_info">On your email has been send a message with verification link.</string>
+    <string name="resend">Resend</string>
+    <string name="confirmed_go_to_login">Email Verified</string>
 </resources>

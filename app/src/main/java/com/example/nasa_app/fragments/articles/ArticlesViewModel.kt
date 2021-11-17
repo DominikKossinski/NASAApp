@@ -4,13 +4,15 @@ import com.example.nasa_app.paging.ArticlesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import pl.kossa.myflights.architecture.BaseViewModel
+import com.example.nasa_app.architecture.BaseViewModel
+import com.example.nasa_app.utils.PreferencesHelper
 import javax.inject.Inject
 
 @HiltViewModel
 class ArticlesViewModel @Inject constructor(
-    private val articlesRepository: ArticlesRepository
-) : BaseViewModel() {
+    private val articlesRepository: ArticlesRepository,
+    preferencesHelper: PreferencesHelper
+) : BaseViewModel(preferencesHelper) {
 
     private var _query = MutableStateFlow("")
     val articles = _query.flatMapLatest {

@@ -6,7 +6,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.nasa_app.activities.MainActivity
+import com.example.nasa_app.activities.main.MainActivity
 import com.example.nasa_app.api.models.ApiError
 import com.example.nasa_app.architecture.BaseFragment
 import com.example.nasa_app.databinding.FragmentSavedArticlesBinding

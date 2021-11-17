@@ -6,6 +6,7 @@ import com.example.nasa_app.api.call.ApiResponseAdapterFactory
 import com.example.nasa_app.api.nasa.NasaService
 import com.example.nasa_app.paging.ArticlesRepository
 import com.example.nasa_app.room.AppDatabase
+import com.example.nasa_app.utils.PreferencesHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +23,11 @@ object AppModule {
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder().build()
+    }
+
+    @Provides
+    fun providePreferencesHelper(@ApplicationContext applicationContext: Context): PreferencesHelper {
+        return PreferencesHelper(applicationContext)
     }
 
     @Provides
