@@ -1,11 +1,13 @@
 package com.example.nasa_app.api.models
 
+import java.lang.Exception
+
 data class ApiErrorBody(
-    val message: String,
-    val description: String
+    val message: String
 )
 
 data class ApiError(
     val code: Int,
-    val body: ApiErrorBody?
+    val body: ApiErrorBody?,
+    val exception: Exception? = null
 )

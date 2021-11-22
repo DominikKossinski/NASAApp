@@ -11,10 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.example.nasa_app.MainNavGraphDirections
 import com.example.nasa_app.R
-import com.example.nasa_app.activities.MainActivity
 import com.example.nasa_app.api.models.ApiError
 import kotlinx.coroutines.flow.collect
-import pl.kossa.myflights.architecture.BaseViewModel
 import java.lang.reflect.ParameterizedType
 
 abstract class BaseDialog<VM : BaseViewModel, VB : ViewBinding> : DialogFragment() {

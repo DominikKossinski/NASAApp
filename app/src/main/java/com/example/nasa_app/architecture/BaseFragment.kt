@@ -6,16 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.example.nasa_app.MainNavGraphDirections
 import com.example.nasa_app.R
+import com.example.nasa_app.activities.main.MainActivity
 import com.example.nasa_app.api.models.ApiError
 import kotlinx.coroutines.flow.collect
-import pl.kossa.myflights.architecture.BaseViewModel
+import kotlinx.coroutines.flow.collectLatest
 import java.lang.reflect.ParameterizedType
 
 abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
@@ -50,22 +51,17 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
     protected open fun setupOnClickListeners() {}
 
     protected open fun collectFlow() {
-//        TODO
-//        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-//            viewModel.signOutFlow.collect {
-//                when (findNavController().graph.id) {
-//                    R.id.main_nav_graph -> {
-//                        Navigation.findNavController(requireActivity(), R.id.mainNavHostFragment)
-//                            .navigate(MainNavGraphDirections.goToLoginActivity())
-//                    }
-//                    R.id.lists_nav_graph -> {
-//                        Navigation.findNavController(requireActivity(), R.id.mainNavHostFragment)
-//                            .navigate(MainNavGraphDirections.goToLoginActivity())
-//                    }
-//                }
-//                (activity as? MainActivity)?.finish()
-//            }
-//        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.signOutFlow.collect {
+                when (findNavController().graph.id) {
+                    R.id.main_nav_graph -> {
+                        Navigation.findNavController(requireActivity(), R.id.mainNavHostFragment)
+                            .navigate(MainNavGraphDirections.goToLoginActivity())
+                    }
+                }
+                (activity as? MainActivity)?.finish()
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.backFlow.collect {
                 when (findNavController().graph.id) {
@@ -87,7 +83,8 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.getNavDirectionsFlow().collect {
+            viewModel.getNavDirectionsFlow().collectLatest {
+                Log.d("MyLog", "Collecting $it")
                 when (findNavController().graph.id) {
                     R.id.main_nav_graph -> {
                         Navigation.findNavController(

@@ -1,18 +1,19 @@
-package com.example.nasa_app.dialogs
+package com.example.nasa_app.activities.main
 
-import dagger.hilt.android.lifecycle.HiltViewModel
 import com.example.nasa_app.architecture.BaseViewModel
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ArticleFromDateViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     preferencesHelper: PreferencesHelper,
     appDatabase: AppDatabase
 ) : BaseViewModel(preferencesHelper, appDatabase) {
 
-    fun navigateToArticle(date: String) {
-        navigate(ArticleFromDateDialogDirections.goToArticle(date))
+
+    fun getUserEmail(): String {
+        return firebaseAuth.currentUser?.email ?: ""
     }
 }

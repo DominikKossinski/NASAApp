@@ -1,71 +1,66 @@
 package com.example.nasa_app.fragments.login
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import com.example.nasa_app.R
+import androidx.lifecycle.lifecycleScope
 import com.example.nasa_app.api.models.ApiError
 import com.example.nasa_app.architecture.BaseFragment
 import com.example.nasa_app.databinding.FragmentLoginBinding
 import com.example.nasa_app.extensions.doOnTextChanged
-import com.google.gson.GsonBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class LoginFragment: BaseFragment<LoginViewModel, FragmentLoginBinding>() {
+class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding>() {
 
     override val viewModel: LoginViewModel by viewModels()
 
     override fun setupOnClickListeners() {
         super.setupOnClickListeners()
         binding.loginButton.setOnClickListener {
-            val name = binding.nameTextInputEditText.text.toString()
-            val password = binding.passwordTextInputEditText.text.toString()
-            if (name.compareTo("") == 0) {
-                binding.nameTextInputLayout.error = getString(R.string.empty_name)
-            }
-            if (password.contentEquals("")) {
-                binding.passwordTextInputLayout.error = getString(R.string.empty_password)
-            }
-            if (!password.equals("") and !name.equals("")) {
-                binding.progressBar.visibility = View.VISIBLE
-                val gson = GsonBuilder().create()
-//           TODO     val user = gson.toJson(User(0, name, password, null, "", null))
-//                LoginAsyncTask(
-//                    this, user, binding.nameTextInputLayout, binding.passwordTextInputLayout,
-//                    binding.nameTextInputEditText, binding.passwordTextInputEditText, binding.progressBar
-//                ).execute()
-            }
+            viewModel.login()
         }
         binding.createAccountButton.setOnClickListener {
             viewModel.navigateToCreateAccount()
         }
-        setUpTextWatchers()
-    }
-
-    private fun setUpTextWatchers() {
-        //TODO refactor
-        binding.nameTextInputEditText.doOnTextChanged {
-            if (it.compareTo("") == 0) {
-                if (!binding.nameTextInputLayout.error.toString().contentEquals(getString(R.string.no_user))) {
-                    binding.nameTextInputLayout.error = getString(R.string.empty_name)
-                }
-            } else {
-                binding.nameTextInputLayout.error = null
-            }
+        binding.emailTie.doOnTextChanged { text ->
+            viewModel.setEmail(text)
         }
-        binding.passwordTextInputEditText.doOnTextChanged {
-            if (it.compareTo("") == 0) {
-                if (!binding.passwordTextInputLayout.error.toString().contentEquals(getString(R.string.wrong_password))) {
-                    binding.passwordTextInputLayout.error = getString(R.string.empty_password)
-                }
-            } else {
-                binding.passwordTextInputLayout.error = null
-            }
+        binding.passwordTie.doOnTextChanged { text ->
+            viewModel.setPassword(text)
         }
     }
 
+    override fun collectFlow() {
+        super.collectFlow()
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.isLoadingData.collect {
+                binding.progressBar.isVisible = it
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.isLoginButtonEnabled.collect {
+                binding.loginButton.isEnabled = it
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.emailError.collect {
+                binding.emailTil.error = it?.let {
+                    binding.emailTie.setText("")
+                    binding.passwordTie.setText("")
+                    getString(it)
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.passwordError.collect {
+                binding.passwordTil.error = it?.let {
+                    binding.passwordTie.setText("")
+                    getString(it)
+                }
+            }
+        }
+    }
 
     override fun handleApiError(apiError: ApiError) {
         TODO("Not yet implemented")

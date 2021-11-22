@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/launcherFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -15,11 +15,60 @@
             android:id="@+id/goToCreateAccount"
             app:destination="@id/createAccountFragment" />
 
+        <action
+            android:id="@+id/goToEmailResend"
+            app:destination="@id/emailResendFragment" />
+
+        <action
+            android:id="@+id/goToLauncher"
+            app:destination="@id/launcherFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/launcherFragment"
+        android:name="com.example.nasa_app.fragments.launcher.LauncherFragment"
+        android:label="LauncherFragment"
+        tools:layout="@layout/fragment_launcher">
+
+
+        <action
+            android:id="@+id/goToLogin"
+            app:destination="@id/loginFragment" />
+
+        <action
+            android:id="@+id/goToMainActivity"
+            app:destination="@id/mainActivity" />
     </fragment>
 
     <fragment
         android:id="@+id/createAccountFragment"
         android:name="com.example.nasa_app.fragments.create_account.CreateAccountFragment"
         android:label="CreateAccountFragment"
-        tools:layout="@layout/fragment_create_account" />
+        tools:layout="@layout/fragment_create_account">
+
+        <action
+            android:id="@+id/goToEmailResend"
+            app:destination="@id/emailResendFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/emailResendFragment"
+        android:name="com.example.nasa_app.fragments.email_resend.EmailResendFragment"
+        android:label="EmailResendFragment"
+        tools:layout="@layout/fragment_email_resend">
+
+        <action
+            android:id="@+id/goToLogin"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment" />
+
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.nasa_app.activities.main.MainActivity"
+        android:label="MainActivity"
+        tools:layout="@layout/activity_main" />
+
 </navigation>

@@ -6,57 +6,32 @@
     android:background="@mipmap/space"
     android:fitsSystemWindows="true">
 
-    <ImageView
-        android:id="@+id/backImageView"
-        android:layout_width="@dimen/back_icon_size"
-        android:layout_height="@dimen/back_icon_size"
-        android:layout_margin="@dimen/margin_16dp"
-        android:background="@drawable/ic_back_24dp"
-        android:contentDescription="@string/back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nameTextInputLayout"
-            style="@style/TextInputLayout"
-            android:hint="@string/user_name"
-            app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
-            app:hintTextAppearance="@style/HintTextInputLabelAppearance">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nameTextInputEditText"
-                style="@style/TextInputEditText"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailTextInputLayout"
+            android:id="@+id/emailTil"
             style="@style/TextInputLayout"
             android:hint="@string/email"
             app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
             app:hintTextAppearance="@style/HintTextInputLabelAppearance">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/emailTextInputEditText"
+                android:id="@+id/emailTie"
                 style="@style/TextInputEditText"
+                android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
-                android:maxEms="40"
-                android:maxLength="40"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passwordTextInputLayout"
+            android:id="@+id/passwordTil"
             style="@style/TextInputLayout"
             android:hint="@string/password"
             app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
@@ -64,19 +39,37 @@
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordTextInputEditText"
+                android:id="@+id/passwordTie"
                 style="@style/TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirmPasswordTil"
+            style="@style/TextInputLayout"
+            android:hint="@string/password"
+            app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
+            app:hintTextAppearance="@style/HintTextInputLabelAppearance"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/confirmPasswordTie"
+                style="@style/TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
-            android:id="@+id/acceptRulesCheckBox"
+            android:id="@+id/regulationsCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:buttonTint="@color/white"
-            android:text="@string/accept_rules"
+            android:text="@string/accept_regulations"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/white" />
 
@@ -84,6 +77,12 @@
             android:id="@+id/createAccountButton"
             style="@style/ButtonStyle"
             android:text="@string/create_account" />
+
+        <Button
+            android:id="@+id/loginButton"
+            style="@style/ButtonStyle"
+            android:text="@string/login" />
+
 
     </LinearLayout>
 

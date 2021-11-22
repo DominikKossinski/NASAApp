@@ -1,4 +1,4 @@
-package pl.kossa.myflights.architecture
+package com.example.nasa_app.architecture
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -9,6 +9,10 @@ import com.example.nasa_app.api.exceptions.ApiServerException
 import com.example.nasa_app.api.exceptions.NoInternetException
 import com.example.nasa_app.api.exceptions.UnauthorizedException
 import com.example.nasa_app.api.models.ApiError
+import com.example.nasa_app.room.AppDatabase
+import com.example.nasa_app.utils.PreferencesHelper
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -17,10 +21,15 @@ import java.io.IOException
 import java.lang.Exception
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import javax.inject.Inject
 
-abstract class BaseViewModel() : ViewModel() {
+abstract class BaseViewModel(
+    protected val preferencesHelper: PreferencesHelper,
+    protected val appDatabase: AppDatabase
+) : ViewModel() {
 
-//    protected val firebaseAuth = FirebaseAuth.getInstance()
+
+    protected val firebaseAuth = FirebaseAuth.getInstance()
 
     private var tokenRefreshed = false
 
@@ -37,11 +46,10 @@ abstract class BaseViewModel() : ViewModel() {
             isLoadingData.value = true
             try {
                 block.invoke()
-            } catch (e: ApiServerException) {
-                apiErrorFlow.emit(e.apiError)
             } catch (e: UnauthorizedException) {
+                Log.e("MyLog", "Unauthorized")
                 if (tokenRefreshed) {
-//TODO                    firebaseAuth.signOut()
+                    firebaseAuth.signOut()
                     signOutFlow.emit(Unit)
                 } else {
                     tokenRefreshed = true
@@ -50,15 +58,18 @@ abstract class BaseViewModel() : ViewModel() {
                     }
                 }
             } catch (e: NoInternetException) {
-//                setToastMessage(R.string.error_no_internet) // TODO
+                setToastMessage(R.string.no_internet_error)
+            } catch (e: ApiServerException) {
+                apiErrorFlow.emit(e.apiError)
             } catch (e: Exception) {
                 when (e) {
                     is SocketTimeoutException, is UnknownHostException, is ConnectionShutdownException, is IOException -> {
-                        e.printStackTrace()
-//                        toastMessage.emit(R.string.error_no_connection_to_server) // TODO
+                        setToastMessage(R.string.no_connection_to_server_error)
+                        apiErrorFlow.emit(ApiError(500, null, e))
                     }
                     else -> {
-//                        setToastMessage(R.string.unexpected_error) // TODO
+                        e.printStackTrace()
+                        setToastMessage(R.string.unexpected_error)
                     }
                 }
             } finally {
@@ -68,38 +79,32 @@ abstract class BaseViewModel() : ViewModel() {
     }
 
 
-    protected fun refreshToken(onSuccess: () -> Unit) {//TODO
-//        firebaseAuth.currentUser?.getIdToken(true)?.addOnSuccessListener {
-//            preferencesHelper.token = it.token
-//            onSuccess()
-//        }?.addOnFailureListener {
-//            when (it) {
-//                is FirebaseNetworkException -> {
-//                    setToastMessage(R.string.error_no_internet)
-//                }
-//                else -> {
-//                    Log.d("MyLog", "Token error: $it")
-//                    setToastMessage(R.string.unexpected_error)
-//                    firebaseAuth.signOut()
-//                    preferencesHelper.token = null
-//                    viewModelScope.launch {
-//                        signOutFlow.emit(Unit)
-//                    }
-//                }
-//            }
-//            isLoadingData.value = false
-//        }
-    }
-
-    fun showComingSoonDialog() { //TODO
-//        viewModelScope.launch {
-//            navigate(MainNavGraphDirections.showComingSoonDialog())
-//        }
+    protected fun refreshToken(onSuccess: () -> Unit) {
+        firebaseAuth.currentUser?.getIdToken(true)?.addOnSuccessListener {
+            tokenRefreshed = false
+            preferencesHelper.token = it.token
+            onSuccess()
+        }?.addOnFailureListener {
+            when (it) {
+                is FirebaseNetworkException -> {
+                    setToastMessage(R.string.no_internet_error)
+                }
+                else -> {
+                    Log.d("MyLog", "Token error: $it")
+                    setToastMessage(R.string.unexpected_error)
+                    firebaseAuth.signOut()
+                    preferencesHelper.token = null
+                    viewModelScope.launch {
+                        signOutFlow.emit(Unit)
+                    }
+                }
+            }
+            isLoadingData.value = false
+        }
     }
 
     protected fun navigate(action: NavDirections) {
         viewModelScope.launch {
-            Log.d("MyLog", "${this@BaseViewModel::class.java} Emitting: $action")
             navDirectionFlow.emit(action)
         }
     }
@@ -111,9 +116,8 @@ abstract class BaseViewModel() : ViewModel() {
     }
 
     fun signOut() {
-        //TODO
-//        firebaseAuth.signOut()
-//        preferencesHelper.token = null
+        firebaseAuth.signOut()
+        preferencesHelper.token = null
         viewModelScope.launch {
             signOutFlow.emit(Unit)
         }
