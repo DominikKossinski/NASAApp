@@ -60,11 +60,6 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding>() {
                 }
             }
         }
-        lifecycleScope.launchWhenStarted {
-            viewModel.activityFinish.collect {
-                requireActivity().finish()
-            }
-        }
     }
 
     override fun handleApiError(apiError: ApiError) {

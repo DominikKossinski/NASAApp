@@ -2,6 +2,7 @@ package com.example.nasa_app.activities.main
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -30,11 +31,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         super.onCreate(savedInstanceState)
 
         binding.navView.setNavigationItemSelectedListener(this)
-//TODO        val headerView = binding.navView.getHeaderView(0)
-//        val nameTextView = headerView.findViewById<TextView>(R.id.userNameTextView)
-//        val emailTextView = headerView.findViewById<TextView>(R.id.userEmailTextView)
-//        nameTextView.text = user!!.name
-//        emailTextView.text = user!!.email
+
+        val headerView = binding.navView.getHeaderView(0)
+        val emailTextView = headerView.findViewById<TextView>(R.id.userEmailTextView)
+        emailTextView.text = viewModel.getUserEmail()
         collectFlow()
     }
 

@@ -98,47 +98,9 @@ class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>()
     }
 
 
-    fun showSavingEnd(saved: Boolean) {
-        //TODO
-        // binding.progressBar.visibility = View.GONE
-//        article!!.saved = saved
-//        val menu = binding.toolbar.menu
-//        if (article!!.saved!!) {
-//            menu!!.findItem(R.id.saveArticle).isVisible = false
-//            menu.findItem(R.id.deleteArticle).isVisible = true
-//        } else {
-//            menu!!.findItem(R.id.saveArticle).isVisible = true
-//            menu.findItem(R.id.deleteArticle).isVisible = false
-//        }
-//        dbHelper!!.updateSaved(article!!, user!!)
-//        if (saved) {
-//            Toast.makeText(this, getString(R.string.success_full_saved), Toast.LENGTH_LONG).show()
-//        } else {
-//            Toast.makeText(this, getString(R.string.error_by_saving), Toast.LENGTH_LONG).show()
-//        }
-    }
-
-    fun showDeletingEnd(deleted: Boolean) {
-        //TODO binding.progressBar.visibility = View.GONE
-//        article!!.saved = !deleted
-//        val menu = binding.toolbar.menu
-//        if (article!!.saved!!) {
-//            menu!!.findItem(R.id.saveArticle).isVisible = false
-//            menu.findItem(R.id.deleteArticle).isVisible = true
-//        } else {
-//            menu!!.findItem(R.id.saveArticle).isVisible = true
-//            menu.findItem(R.id.deleteArticle).isVisible = false
-//        }
-//        dbHelper!!.updateSaved(article!!, user!!)
-//        if (deleted) {
-//            Toast.makeText(this, getString(R.string.success_full_deleted), Toast.LENGTH_LONG).show()
-//        } else {
-//            Toast.makeText(this, getString(R.string.error_by_deleting), Toast.LENGTH_LONG).show()
-//        }
-    }
-
 
     override fun handleApiError(apiError: ApiError) {
-        TODO("Not yet implemented")
+        Log.e("MyLog", "ApiError: $apiError")
+        //TODO("Not yet implemented")
     }
 }

@@ -2,6 +2,7 @@ package com.example.nasa_app.fragments.email_resend
 
 import com.example.nasa_app.R
 import com.example.nasa_app.architecture.BaseViewModel
+import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
 import com.google.firebase.FirebaseNetworkException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,8 +10,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EmailResendViewModel @Inject constructor(
-    preferencesHelper: PreferencesHelper
-) : BaseViewModel(preferencesHelper) {
+    preferencesHelper: PreferencesHelper,
+    appDatabase: AppDatabase
+) : BaseViewModel(preferencesHelper, appDatabase) {
 
     fun resendEmail() {
         firebaseAuth.currentUser?.sendEmailVerification()?.addOnSuccessListener {

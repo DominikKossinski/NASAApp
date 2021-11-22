@@ -9,6 +9,7 @@ import com.example.nasa_app.api.exceptions.ApiServerException
 import com.example.nasa_app.api.exceptions.NoInternetException
 import com.example.nasa_app.api.exceptions.UnauthorizedException
 import com.example.nasa_app.api.models.ApiError
+import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
@@ -20,10 +21,13 @@ import java.io.IOException
 import java.lang.Exception
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import javax.inject.Inject
 
 abstract class BaseViewModel(
-    private val preferencesHelper: PreferencesHelper
+    protected val preferencesHelper: PreferencesHelper,
+    protected val appDatabase: AppDatabase
 ) : ViewModel() {
+
 
     protected val firebaseAuth = FirebaseAuth.getInstance()
 
@@ -42,11 +46,10 @@ abstract class BaseViewModel(
             isLoadingData.value = true
             try {
                 block.invoke()
-            } catch (e: ApiServerException) {
-                apiErrorFlow.emit(e.apiError)
             } catch (e: UnauthorizedException) {
+                Log.e("MyLog", "Unauthorized")
                 if (tokenRefreshed) {
-//TODO                    firebaseAuth.signOut()
+                    firebaseAuth.signOut()
                     signOutFlow.emit(Unit)
                 } else {
                     tokenRefreshed = true
@@ -55,15 +58,18 @@ abstract class BaseViewModel(
                     }
                 }
             } catch (e: NoInternetException) {
-//                setToastMessage(R.string.error_no_internet) // TODO
+                setToastMessage(R.string.no_internet_error)
+            } catch (e: ApiServerException) {
+                apiErrorFlow.emit(e.apiError)
             } catch (e: Exception) {
                 when (e) {
                     is SocketTimeoutException, is UnknownHostException, is ConnectionShutdownException, is IOException -> {
-                        e.printStackTrace()
-//                        toastMessage.emit(R.string.error_no_connection_to_server) // TODO
+                        setToastMessage(R.string.no_connection_to_server_error)
+                        apiErrorFlow.emit(ApiError(500, null, e))
                     }
                     else -> {
-//                        setToastMessage(R.string.unexpected_error) // TODO
+                        e.printStackTrace()
+                        setToastMessage(R.string.unexpected_error)
                     }
                 }
             } finally {
@@ -73,8 +79,9 @@ abstract class BaseViewModel(
     }
 
 
-    protected fun refreshToken(onSuccess: () -> Unit) {//TODO
+    protected fun refreshToken(onSuccess: () -> Unit) {
         firebaseAuth.currentUser?.getIdToken(true)?.addOnSuccessListener {
+            tokenRefreshed = false
             preferencesHelper.token = it.token
             onSuccess()
         }?.addOnFailureListener {
@@ -96,15 +103,8 @@ abstract class BaseViewModel(
         }
     }
 
-    fun showComingSoonDialog() { //TODO
-//        viewModelScope.launch {
-//            navigate(MainNavGraphDirections.showComingSoonDialog())
-//        }
-    }
-
     protected fun navigate(action: NavDirections) {
         viewModelScope.launch {
-            Log.d("MyLog", "${this@BaseViewModel::class.java} Emitting: $action")
             navDirectionFlow.emit(action)
         }
     }

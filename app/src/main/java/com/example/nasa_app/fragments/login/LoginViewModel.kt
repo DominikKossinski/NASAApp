@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import com.example.nasa_app.architecture.BaseViewModel
+import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -18,8 +19,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    preferencesHelper: PreferencesHelper
-) : BaseViewModel(preferencesHelper) {
+    preferencesHelper: PreferencesHelper,
+    appDatabase: AppDatabase
+) : BaseViewModel(preferencesHelper, appDatabase) {
 
     private val _email = MutableStateFlow("")
     private val _password = MutableStateFlow("")
@@ -30,7 +32,6 @@ class LoginViewModel @Inject constructor(
     }
     val emailError = MutableStateFlow<Int?>(null)
     val passwordError = MutableStateFlow<Int?>(null)
-    val activityFinish = MutableSharedFlow<Unit>()
 
 
     fun navigateToCreateAccount() {
@@ -64,12 +65,8 @@ class LoginViewModel @Inject constructor(
                         Log.d("MyLog", "Success sign in")
                         if (firebaseAuth.currentUser != null && firebaseAuth.currentUser?.isEmailVerified ?: false) {
                             refreshToken {
-                                Log.d("MyLog", "Token Login: $it")
-                                navigate(LoginFragmentDirections.goToMainActivity())
+                                navigate(LoginFragmentDirections.goToLauncher())
                                 isLoadingData.value = false
-                                viewModelScope.launch {
-                                    activityFinish.emit(Unit)
-                                }
                             }
                         } else {
                             resendVerificationEmail()

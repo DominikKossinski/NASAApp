@@ -22,8 +22,12 @@ class SavedArticlesFragment : BaseFragment<SavedArticlesViewModel, FragmentSaved
 
     private val adapter = ArticlesRVAdapter()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+
+    override fun setupOnClickListeners() {
+        super.setupOnClickListeners()
+        binding.articlesSwipeRefreshLayout.setOnRefreshListener {
+            viewModel.refreshArticles()
+        }
         (requireActivity() as? MainActivity)?.setupDrawer(binding.toolbar)
         setupRecyclerView()
     }
@@ -46,7 +50,17 @@ class SavedArticlesFragment : BaseFragment<SavedArticlesViewModel, FragmentSaved
                 adapter.notifyDataSetChanged()
             }
         }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.isLoadingData.collect {
+                binding.articlesSwipeRefreshLayout.isRefreshing = it
+            }
+        }
     }
 
     override fun handleApiError(apiError: ApiError) {}
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getArticles()
+    }
 }

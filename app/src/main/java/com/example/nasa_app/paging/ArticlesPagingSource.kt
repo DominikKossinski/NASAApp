@@ -51,11 +51,10 @@ class ArticlesPagingSource(
                 LoadResult.Page(
                     data = filtered,
                     prevKey = if (endKey.time != Date().getDayBegging().time) endKey else null,
-                    nextKey = null //if (startKey.time >= "1995-06-16".toDate().time) startKey.minusDays(1) else null
+                    nextKey = null
                 )
             }
         } catch (e: Exception) {
-            //TODO errors
             LoadResult.Error(e)
         } finally {
             loadingFlow.value = false

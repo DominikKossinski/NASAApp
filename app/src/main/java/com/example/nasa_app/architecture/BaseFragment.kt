@@ -1,6 +1,7 @@
 package com.example.nasa_app.architecture
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.example.nasa_app.R
 import com.example.nasa_app.activities.main.MainActivity
 import com.example.nasa_app.api.models.ApiError
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import java.lang.reflect.ParameterizedType
 
 abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
@@ -81,7 +83,8 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.getNavDirectionsFlow().collect {
+            viewModel.getNavDirectionsFlow().collectLatest {
+                Log.d("MyLog", "Collecting $it")
                 when (findNavController().graph.id) {
                     R.id.main_nav_graph -> {
                         Navigation.findNavController(

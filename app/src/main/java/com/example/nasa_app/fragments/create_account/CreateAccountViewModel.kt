@@ -5,6 +5,7 @@ import android.util.Patterns
 import com.example.nasa_app.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.example.nasa_app.architecture.BaseViewModel
+import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -16,8 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateAccountViewModel @Inject constructor(
-    preferencesHelper: PreferencesHelper
-) : BaseViewModel(preferencesHelper) {
+    preferencesHelper: PreferencesHelper,
+    appDatabase: AppDatabase
+) : BaseViewModel(preferencesHelper, appDatabase) {
 
     private val _email = MutableStateFlow("")
     private val _password = MutableStateFlow("")

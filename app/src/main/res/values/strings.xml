@@ -51,6 +51,7 @@
     <string name="no_internet_error">No internet</string>
     <string name="password_not_matches_error">Password doesn\'t match</string>
     <string name="to_weak_password_error">Ad least 6 characters</string>
+    <string name="no_connection_to_server_error">No connection to server</string>
 
 
 
