@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/space"
-    android:fitsSystemWindows="true">
+    android:background="@mipmap/space">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,8 +17,7 @@
             android:id="@+id/emailTil"
             style="@style/TextInputLayout"
             android:hint="@string/email"
-            app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
-            app:hintTextAppearance="@style/HintTextInputLabelAppearance">
+            app:errorTextAppearance="@style/ErrorTextInputLabelAppearance">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailTie"
@@ -35,7 +33,6 @@
             style="@style/TextInputLayout"
             android:hint="@string/password"
             app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
-            app:hintTextAppearance="@style/HintTextInputLabelAppearance"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -52,7 +49,6 @@
             style="@style/TextInputLayout"
             android:hint="@string/password"
             app:errorTextAppearance="@style/ErrorTextInputLabelAppearance"
-            app:hintTextAppearance="@style/HintTextInputLabelAppearance"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -73,14 +69,18 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/white" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/createAccountButton"
-            style="@style/ButtonStyle"
+            style="@style/WhiteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/create_account" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/loginButton"
-            style="@style/ButtonStyle"
+            style="@style/WhiteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/login" />
 
 
