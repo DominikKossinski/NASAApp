@@ -107,7 +107,7 @@ object NasaAppModule {
     fun provideRetrofit(@FirebaseApiModule client: OkHttpClient, gson: Gson): Retrofit {
         return Retrofit.Builder()
             .client(client)
-            .baseUrl("http://10.0.2.2:5001/nasaapp-334ad/us-central1/app/")
+            .baseUrl("http://192.168.200.121:5001/nasaapp-334ad/us-central1/app/")
             .addCallAdapterFactory(ApiResponseAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

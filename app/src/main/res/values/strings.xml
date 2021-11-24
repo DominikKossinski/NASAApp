@@ -71,4 +71,7 @@
     <string name="email_resend_info">On your email has been send a message with verification link.</string>
     <string name="resend">Resend</string>
     <string name="confirmed_go_to_login">Email Verified</string>
+
+    <string name="sync">Synchronizing your data</string>
+
 </resources>
