@@ -44,6 +44,9 @@
 
     <!--SETTINGS-->
     <string name="daily_notifications">Daily notifications</string>
+    <string name="daily_notifications_message">Do you want to receive daily reminder about article? Click
+    below and select time, on which the application should notify you about new article.</string>
+    <string name="set_notification">Set notification</string>
 
     <!--ERRORS-->
     <string name="unexpected_error">Unexpected Error</string>
@@ -78,5 +81,7 @@
     <string name="confirmed_go_to_login">Email Verified</string>
 
     <string name="sync">Synchronizing your data</string>
+    <string name="colon">:</string>
+    <string name="two_places_int_format">%02d</string>
 
 </resources>

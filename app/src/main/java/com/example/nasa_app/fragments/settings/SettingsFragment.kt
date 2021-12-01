@@ -14,8 +14,13 @@ class SettingsFragment : BaseFragment<SettingsViewModel, FragmentSettingsBinding
 
     override fun setupOnClickListeners() {
         (requireActivity() as? MainActivity)?.setupDrawer(binding.toolbar)
+        //TODO setup initial state of notifications
         binding.notificationsCs.setOnChangeClickListener {
-            //TODO
+            if (it) {
+                viewModel.showDailyNotificationBottomSheet()
+            } // TODO else {
+                //TODO clear daily notification
+            //TODO }
         }
     }
 

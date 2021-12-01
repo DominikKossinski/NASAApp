@@ -59,7 +59,18 @@
         android:id="@+id/settingsFragment"
         android:name="com.example.nasa_app.fragments.settings.SettingsFragment"
         android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+
+        <action
+            android:id="@+id/showDailyNotificationBottomSheet"
+            app:destination="@id/dailyNotificationBottomSheet" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/dailyNotificationBottomSheet"
+        android:name="com.example.nasa_app.dialogs.notifications.DailyNotificationBottomSheet"
+        android:label="DailyNotificationBottomSheet"
+        tools:layout="@layout/bottom_sheet_daily_notification" />
 
     <dialog
         android:id="@+id/articleAddDialog"
