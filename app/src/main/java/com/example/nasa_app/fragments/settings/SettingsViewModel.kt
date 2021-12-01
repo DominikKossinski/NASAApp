@@ -1,18 +1,15 @@
-package com.example.nasa_app.dialogs
+package com.example.nasa_app.fragments.settings
 
-import dagger.hilt.android.lifecycle.HiltViewModel
 import com.example.nasa_app.architecture.BaseViewModel
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ArticleFromDateViewModel @Inject constructor(
+class SettingsViewModel @Inject constructor(
     preferencesHelper: PreferencesHelper,
     appDatabase: AppDatabase
 ) : BaseViewModel(preferencesHelper, appDatabase) {
 
-    fun navigateToArticle(date: String) {
-        navigate(ArticleFromDateDialogDirections.goToArticle(date))
-    }
 }
