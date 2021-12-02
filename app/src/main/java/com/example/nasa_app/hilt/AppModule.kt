@@ -5,12 +5,12 @@ import androidx.room.Room
 import com.example.nasa_app.api.call.ApiResponseAdapterFactory
 import com.example.nasa_app.api.nasa.NasaService
 import com.example.nasa_app.api.server.UsersService
+import com.example.nasa_app.managers.NasaNotificationsManager
 import com.example.nasa_app.paging.ArticlesRepository
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +19,6 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 import javax.inject.Qualifier
 
 @Qualifier
@@ -80,6 +79,14 @@ object NasaAppModule {
     @Provides
     fun providePreferencesHelper(@ApplicationContext applicationContext: Context): PreferencesHelper {
         return PreferencesHelper(applicationContext)
+    }
+
+    @Provides
+    fun provideNasaNotificationsManager(
+        @ApplicationContext applicationContext: Context,
+        preferencesHelper: PreferencesHelper
+    ): NasaNotificationsManager {
+        return NasaNotificationsManager(applicationContext, preferencesHelper)
     }
 
     @Provides

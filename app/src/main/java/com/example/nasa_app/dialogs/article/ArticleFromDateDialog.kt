@@ -1,4 +1,4 @@
-package com.example.nasa_app.dialogs
+package com.example.nasa_app.dialogs.article
 
 import android.os.Bundle
 import android.view.View

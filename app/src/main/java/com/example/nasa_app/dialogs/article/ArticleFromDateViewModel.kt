@@ -1,4 +1,4 @@
-package com.example.nasa_app.dialogs
+package com.example.nasa_app.dialogs.article
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.example.nasa_app.architecture.BaseViewModel

@@ -81,6 +81,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
             R.id.nav_saved_articles -> {
                 findNavController(R.id.mainNavHostFragment).navigate(MainNavGraphDirections.toSavedArticles())
             }
+            R.id.nav_settings -> {
+                findNavController(R.id.mainNavHostFragment).navigate(MainNavGraphDirections.toSettingsFragment())
+            }
             R.id.nav_logout -> {
                 viewModel.signOut()
             }
