@@ -1,4 +1,4 @@
-package com.example.nasa_app.services
+package com.example.nasa_app.receivers
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -17,9 +17,12 @@ import com.example.nasa_app.extensions.toDateString
 import java.util.*
 import android.media.RingtoneManager
 import android.util.Log
+import android.widget.Toast
+import com.example.nasa_app.managers.NasaNotificationsManager
+import com.example.nasa_app.utils.PreferencesHelper
 
 
-class DailyNotificationService : BroadcastReceiver() {
+class DailyNotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent?) {
         createNotificationChannel(context)
@@ -29,7 +32,7 @@ class DailyNotificationService : BroadcastReceiver() {
     private fun createNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_ID, importance)//TODO description
+            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_ID, importance)
             val notificationManager = getSystemService(context, NotificationManager::class.java)
             notificationManager?.createNotificationChannel(channel)
         }
@@ -40,8 +43,9 @@ class DailyNotificationService : BroadcastReceiver() {
         val sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notifications)
-            .setContentTitle("New article")
+            .setContentTitle(context.getString(R.string.new_article))
             .setSound(sound)
+            .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         val pendingIntent = NavDeepLinkBuilder(context)
@@ -56,12 +60,12 @@ class DailyNotificationService : BroadcastReceiver() {
         builder.setContentIntent(pendingIntent)
 
         with(NotificationManagerCompat.from(context)) {
-            Log.d("MyLog", "SendingNotification")
-            notify(1, builder.build()) //TODO notification id
+            notify(DAILY_NOTIFICATION_ID, builder.build())
         }
     }
 
     companion object {
         const val CHANNEL_ID = "DAILY_NOTIFICATION_CHANNEL"
+        private const val DAILY_NOTIFICATION_ID = 1
     }
 }

@@ -25,7 +25,14 @@
         android:id="@+id/notificationsCs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="@string/daily_notifications"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:title="@string/daily_notifications" />
+
+    <com.example.nasa_app.views.TextWithChangeView
+        android:id="@+id/dailyNotificationTwcv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/notificationsCs" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
