@@ -54,4 +54,5 @@ as an server to store articles saved by user.
 - [Glide](https://github.com/bumptech/glide)
 - [Room](https://developer.android.com/jetpack/androidx/releases/room)
 - [Firebase](https://firebase.google.com/docs/android/setup)
+- [Clout Firestore](https://firebase.google.com/docs/firestore)
 - [Paging](https://developer.android.com/topic/libraries/architecture/paging)
