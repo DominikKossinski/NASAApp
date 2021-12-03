@@ -25,6 +25,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailTie"
                 style="@style/TextInputEditText"
+                android:inputType="text"
                 android:imeOptions="actionNext" />
         </com.google.android.material.textfield.TextInputLayout>
 

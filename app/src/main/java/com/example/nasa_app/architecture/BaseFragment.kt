@@ -52,7 +52,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
 
     protected open fun collectFlow() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.signOutFlow.collect {
+            viewModel.signOutFlow.collectLatest {
                 when (findNavController().graph.id) {
                     R.id.main_nav_graph -> {
                         Navigation.findNavController(requireActivity(), R.id.mainNavHostFragment)
@@ -63,7 +63,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.backFlow.collect {
+            viewModel.backFlow.collectLatest {
                 when (findNavController().graph.id) {
                     R.id.main_nav_graph -> {
                         Navigation.findNavController(
@@ -84,7 +84,6 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.getNavDirectionsFlow().collectLatest {
-                Log.d("MyLog", "Collecting $it")
                 when (findNavController().graph.id) {
                     R.id.main_nav_graph -> {
                         Navigation.findNavController(
