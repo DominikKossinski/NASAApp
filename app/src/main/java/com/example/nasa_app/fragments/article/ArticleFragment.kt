@@ -50,7 +50,7 @@ class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>()
     override fun collectFlow() {
         super.collectFlow()
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.article.collect {
+            viewModel.articleFlow.collect {
                 it?.let { setupArticleData(it) }
             }
         }

@@ -3,8 +3,7 @@
 If you are interested in astronomy this app is for you. Application
 uses [NASA open api](https://api.nasa.gov/) - APOD (Astronomy Picture of the day) to download daily articles about astronomy. User is able
 to save his/her favorites articles locally, to have possibility to read them
-even if he/she dosen't have internet at the moment. It uses also firebase functions from [NASAAppFunction](https://github.com/DominikKossinski/NasaAppFunctions)
-as an server to store articles saved by user.
+even if he/she dosen't have internet at the moment. 
 
 ## Demo
 
@@ -54,4 +53,5 @@ as an server to store articles saved by user.
 - [Glide](https://github.com/bumptech/glide)
 - [Room](https://developer.android.com/jetpack/androidx/releases/room)
 - [Firebase](https://firebase.google.com/docs/android/setup)
+- [Cloud Firestore](https://firebase.google.com/docs/firestore)
 - [Paging](https://developer.android.com/topic/libraries/architecture/paging)

@@ -15,7 +15,7 @@ data class NasaArticle(
     @ColumnInfo(name = "mediaType") val mediaType: NasaMediaType,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "url") val url: String,
-    @ColumnInfo(name = "copyright") val copyright: String
+    @ColumnInfo(name = "copyright") val copyright: String?
 ) {
     enum class NasaMediaType {
         @SerializedName("image")

@@ -36,6 +36,7 @@ class LauncherFragment : BaseFragment<LauncherViewModel, FragmentLauncherBinding
                 requireActivity().finish()
             }
         }
+
     }
 
     override fun handleApiError(apiError: ApiError) {
