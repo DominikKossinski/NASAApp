@@ -26,13 +26,14 @@ class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>()
     override val viewModel: ArticleViewModel by viewModels()
 
     override fun setupOnClickListeners() {
-        binding.toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_back_24dp)
+        binding.toolbar.navigationIcon =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_back_24dp)
         binding.toolbar.inflateMenu(R.menu.menu_article)
         val menu = binding.toolbar.menu
         menu?.findItem(R.id.saveArticle)?.isVisible = false
         menu?.findItem(R.id.deleteArticle)?.isVisible = false
         binding.toolbar.setOnMenuItemClickListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.saveArticle -> {
                     viewModel.saveArticle()
                 }
@@ -96,7 +97,6 @@ class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>()
                 .into(simpleTarget)
         }
     }
-
 
 
     override fun handleApiError(apiError: ApiError) {
