@@ -8,6 +8,7 @@ import com.example.nasa_app.api.exceptions.UnauthorizedException
 import com.example.nasa_app.api.models.ApiError
 import com.example.nasa_app.api.models.ApiErrorBody
 import com.example.nasa_app.api.models.HttpCode
+import okio.Timeout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Converter
@@ -65,4 +66,5 @@ class ApiCall<S : Any>(
     }
 
     override fun request(): Request = delegate.request()
+    override fun timeout(): Timeout = Timeout()
 }
