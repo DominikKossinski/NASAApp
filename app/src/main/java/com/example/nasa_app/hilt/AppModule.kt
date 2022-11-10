@@ -8,6 +8,7 @@ import com.example.nasa_app.managers.NasaNotificationsManager
 import com.example.nasa_app.paging.ArticlesRepository
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
+import com.example.nasa_app.utils.analitics.AnalyticsTracker
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +17,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Qualifier
+import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -66,5 +67,11 @@ object AppModule {
             applicationContext,
             AppDatabase::class.java, "articles-db"
         ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAnalyticsTracker(): AnalyticsTracker {
+        return AnalyticsTracker()
     }
 }

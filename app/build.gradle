@@ -58,7 +58,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
     androidTestImplementation "androidx.fragment:fragment-testing:1.5.4"
 
     //Hilt
@@ -105,9 +104,9 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     //Firebase
-    implementation platform('com.google.firebase:firebase-bom:29.0.0')
-
-    //Firestore
+    implementation platform('com.google.firebase:firebase-bom:31.0.2')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
     testImplementation 'junit:junit:4.13.2'
