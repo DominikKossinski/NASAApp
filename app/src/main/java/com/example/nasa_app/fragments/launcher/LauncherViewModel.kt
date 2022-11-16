@@ -7,6 +7,7 @@ import com.example.nasa_app.api.nasa.NasaService
 import com.example.nasa_app.architecture.BaseViewModel
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
+import com.example.nasa_app.utils.analitics.AnalyticsTracker
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LauncherViewModel @Inject constructor(
     private val nasaService: NasaService,
+    private val analyticsTracker: AnalyticsTracker,
     preferencesHelper: PreferencesHelper,
     appDatabase: AppDatabase
 ) : BaseViewModel(preferencesHelper, appDatabase) {
@@ -32,6 +34,7 @@ class LauncherViewModel @Inject constructor(
     fun fetchArticles() {
         if (firebaseAuth.currentUser == null || firebaseAuth.currentUser?.isEmailVerified == false) {
             firebaseAuth.signOut()
+            analyticsTracker.setUserId(null)
             viewModelScope.launch {
                 delay(1_000)
                 navigate(LauncherFragmentDirections.goToLogin())
@@ -39,6 +42,7 @@ class LauncherViewModel @Inject constructor(
         } else {
             isSyncFlow.value = true
             val userId = firebaseAuth.currentUser?.uid
+            analyticsTracker.setUserId(userId)
             userId?.let {
                 db.collection(userId).document("articles").collection("articles").get()
                     .addOnSuccessListener { result ->

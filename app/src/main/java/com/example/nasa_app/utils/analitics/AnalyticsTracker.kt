@@ -10,6 +10,9 @@ class AnalyticsTracker {
 
     private val analytics = Firebase.analytics
 
+    fun setUserId(userId: String?) {
+        analytics.setUserId(userId)
+    }
 
     fun logClickOpenArticle(article: NasaArticle) {
         val params = Bundle().apply {
