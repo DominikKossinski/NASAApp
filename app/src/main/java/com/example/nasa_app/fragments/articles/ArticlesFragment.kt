@@ -52,7 +52,7 @@ class ArticlesFragment : BaseFragment<ArticlesViewModel, FragmentArticlesBinding
 
     private fun setupRecyclerView() {
         adapter.setOnItemClickListener { article ->
-            viewModel.navigateToArticle(article.date.toDateString())
+            viewModel.navigateToArticle(article)
         }
         binding.articlesRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.articlesRecyclerView.adapter = adapter
