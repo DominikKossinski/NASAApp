@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.nasa_app.BuildConfig
 import com.example.nasa_app.R
 import com.example.nasa_app.api.nasa.NasaArticle
-import com.example.nasa_app.api.nasa.NasaService
+import com.example.nasa_app.api.nasa.ArticlesService
 import com.example.nasa_app.architecture.BaseViewModel
 import com.example.nasa_app.extensions.toDateString
 import com.example.nasa_app.room.AppDatabase
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ArticleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val nasaService: NasaService,
+    private val articlesService: ArticlesService,
     preferencesHelper: PreferencesHelper,
     appDatabase: AppDatabase
 ) : BaseViewModel(preferencesHelper, appDatabase) {
@@ -47,7 +47,7 @@ class ArticleViewModel @Inject constructor(
     fun fetchArticle() {
         makeRequest {
             Log.d("MyLog", "Date $date")
-            val response = nasaService.getArticle(BuildConfig.NASA_API_KEY, date)
+            val response = articlesService.getArticle(date)
             Log.d("MyLog", "Response: ${response.body}")
             response.body?.let { articleFlow.value = it }
         }

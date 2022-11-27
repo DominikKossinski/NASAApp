@@ -5,12 +5,12 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.nasa_app.api.models.ApiError
 import com.example.nasa_app.api.nasa.NasaArticle
-import com.example.nasa_app.api.nasa.NasaService
+import com.example.nasa_app.api.nasa.ArticlesService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ArticlesRepository(
-    private val nasaService: NasaService
+    private val articlesService: ArticlesService
 ) {
 
     fun getArticles(
@@ -20,7 +20,7 @@ class ArticlesRepository(
     ): Flow<PagingData<NasaArticle>> {
         return Pager(
             config = PagingConfig(1, enablePlaceholders = true),
-            pagingSourceFactory = { ArticlesPagingSource(nasaService, query, loadingFlow, apiErrorFlow) }
+            pagingSourceFactory = { ArticlesPagingSource(articlesService, query, loadingFlow, apiErrorFlow) }
         ).flow
     }
 

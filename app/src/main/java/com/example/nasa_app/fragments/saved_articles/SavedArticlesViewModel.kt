@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.nasa_app.BuildConfig
 import com.example.nasa_app.api.nasa.NasaArticle
-import com.example.nasa_app.api.nasa.NasaService
+import com.example.nasa_app.api.nasa.ArticlesService
 import com.example.nasa_app.architecture.BaseViewModel
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SavedArticlesViewModel @Inject constructor(
-    private val nasaService: NasaService,
+    private val articlesService: ArticlesService,
     preferencesHelper: PreferencesHelper,
     appDatabase: AppDatabase
 ) : BaseViewModel(preferencesHelper, appDatabase) {
@@ -60,7 +60,7 @@ class SavedArticlesViewModel @Inject constructor(
                         makeRequest {
                             for (date in toDownload) {
                                 val nasaResponse =
-                                    nasaService.getArticle(BuildConfig.NASA_API_KEY, date)
+                                    articlesService.getArticle(date)
                                 nasaResponse.body?.let {
                                     appDatabase.nasaArticlesDao().saveArticle(it)
                                 }

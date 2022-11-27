@@ -2,10 +2,10 @@ package com.example.nasa_app.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.nasa_app.BuildConfig
+import com.example.nasa_app.api.exceptions.UnauthorizedException
 import com.example.nasa_app.api.models.ApiError
+import com.example.nasa_app.api.nasa.ArticlesService
 import com.example.nasa_app.api.nasa.NasaArticle
-import com.example.nasa_app.api.nasa.NasaService
 import com.example.nasa_app.extensions.getDayBegging
 import com.example.nasa_app.extensions.minusDays
 import com.example.nasa_app.extensions.toDate
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
 
 class ArticlesPagingSource(
-    private val nasaService: NasaService,
+    private val articlesService: ArticlesService,
     private val query: String,
     private val loadingFlow: MutableStateFlow<Boolean>,
     private val apiErrorFlow: MutableStateFlow<ApiError?>
@@ -27,21 +27,21 @@ class ArticlesPagingSource(
         val endKey = (params.key ?: Date()).getDayBegging()
         val startKey = endKey.minusDays(20)
         val loadResults = try {
+            // TODO handling not refreshed token
             val response =
-                nasaService.getArticles(
-                    BuildConfig.NASA_API_KEY,
+                articlesService.getArticles(
                     startKey.toDateString(),
                     endKey.toDateString()
                 )
             val data = (response.body ?: emptyList())
             val filtered = data.sortedByDescending { it.date.time }
                 .filter { it.title.lowercase().contains(query.lowercase()) }
-            if(filtered.isEmpty()) {
+            if (filtered.isEmpty()) {
                 emptyResponses += 1
             } else {
                 emptyResponses = 0
             }
-            if(emptyResponses <= MAX_EMPTY_RESPONSES) {
+            if (emptyResponses <= MAX_EMPTY_RESPONSES) {
                 LoadResult.Page(
                     data = filtered,
                     prevKey = if (endKey.time != Date().getDayBegging().time) endKey else null,
