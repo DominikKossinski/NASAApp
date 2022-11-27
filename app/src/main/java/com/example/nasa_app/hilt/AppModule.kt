@@ -24,15 +24,29 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder().build()
+    fun providePreferencesHelper(@ApplicationContext applicationContext: Context): PreferencesHelper {
+        return PreferencesHelper(applicationContext)
+    }
+
+
+    @Provides
+    fun provideOkHttpClient(preferencesHelper: PreferencesHelper): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val token = preferencesHelper.token
+                val newRequest = chain.request().newBuilder()
+                    .addHeader("Authorization", "Bearer $token")
+                    .build()
+                chain.proceed(newRequest)
+            }
+            .build()
     }
 
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .client(client)
-            .baseUrl("https://api.nasa.gov/")
+            .baseUrl("https://10.0.2.2:8080/")
             .addCallAdapterFactory(ApiResponseAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -46,11 +60,6 @@ object AppModule {
     @Provides
     fun provideArticlesRepository(nasaService: NasaService): ArticlesRepository {
         return ArticlesRepository(nasaService)
-    }
-
-    @Provides
-    fun providePreferencesHelper(@ApplicationContext applicationContext: Context): PreferencesHelper {
-        return PreferencesHelper(applicationContext)
     }
 
     @Provides
