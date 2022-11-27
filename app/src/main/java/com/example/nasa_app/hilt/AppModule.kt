@@ -45,14 +45,12 @@ object AppModule {
                     if (initialResponse.code == 403 || initialResponse.code == 401) {
                         return@addInterceptor runBlocking {
                             initialResponse.close()
-                            Log.d("MyLog", "RefreshToken")
                             preferencesHelper.refreshToken()
                             val token = preferencesHelper.token
                             val newRequest = chain.request().newBuilder()
                                 .addHeader("Authorization", "Bearer $token")
-                                .addHeader("Test", "Test")
+                                .addHeader("TokenRefreshed", "Test")
                                 .build()
-                            Log.d("MyLog", "NewRequest")
                             chain.proceed(newRequest)
                         }
                     } else {
