@@ -2,14 +2,11 @@ package com.example.nasa_app.fragments.launcher
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.example.nasa_app.BuildConfig
 import com.example.nasa_app.api.nasa.ArticlesService
 import com.example.nasa_app.architecture.BaseViewModel
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
 import com.example.nasa_app.utils.analitics.AnalyticsTracker
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,8 +21,6 @@ class LauncherViewModel @Inject constructor(
     preferencesHelper: PreferencesHelper,
     appDatabase: AppDatabase
 ) : BaseViewModel(preferencesHelper, appDatabase) {
-
-    private val db = Firebase.firestore
 
     val activityFinish = MutableSharedFlow<Unit>(1)
     val isSyncFlow = MutableStateFlow(false)
@@ -45,42 +40,30 @@ class LauncherViewModel @Inject constructor(
                 val userId = firebaseAuth.currentUser?.uid
                 analyticsTracker.setUserId(userId)
                 userId?.let {
-                    db.collection(userId).document("articles").collection("articles").get()
-                        .addOnSuccessListener { result ->
-                            val apiDates = arrayListOf<String>()
-                            for (document in result) {
-                                val docDate = document.data["date"] as? String
-                                docDate?.let { apiDates.add(it) }
-                                Log.d("MyLog", "Doc: ${document.data}")
-                            }
-                            Log.d("MyLog", "Saved dates ${apiDates}")
-                            viewModelScope.launch {
-                                val savedDates = appDatabase.nasaArticlesDao().getSavedDates()
-                                val toDelete = savedDates.filter { it !in apiDates }
-                                val toDownload = apiDates.filter { it !in savedDates }
-                                Log.d("MyLog", "Saved locally: $savedDates")
-                                Log.d("MyLog", "To Delete: $toDelete")
-                                Log.d("MyLog", "To download: $toDownload")
-                                goToMainActivity()
-                                for (date in toDelete) {
-                                    appDatabase.nasaArticlesDao().deleteByDate(date)
-                                }
-                                makeRequest {
-                                    for (date in toDownload) {
-                                        //TODO progress bar
-                                        val nasaResponse =
-                                            articlesService.getArticle(date)
-                                        nasaResponse.body?.let {
-                                            appDatabase.nasaArticlesDao().saveArticle(it)
-                                        }
-                                    }
+                    viewModelScope.launch {
+                        // TODO get apiDates from API
+                        val apiDates = emptyList<String>()
+                        val savedDates = appDatabase.nasaArticlesDao().getSavedDates()
+                        val toDelete = savedDates.filter { it !in apiDates }
+                        val toDownload = apiDates.filter { it !in savedDates }
+                        Log.d("MyLog", "Saved locally: $savedDates")
+                        Log.d("MyLog", "To Delete: $toDelete")
+                        Log.d("MyLog", "To download: $toDownload")
+                        goToMainActivity()
+                        for (date in toDelete) {
+                            appDatabase.nasaArticlesDao().deleteByDate(date)
+                        }
+                        makeRequest {
+                            for (date in toDownload) {
+                                //TODO progress bar
+                                val nasaResponse =
+                                    articlesService.getArticle(date)
+                                nasaResponse.body?.let {
+                                    appDatabase.nasaArticlesDao().saveArticle(it)
                                 }
                             }
                         }
-                        .addOnFailureListener { exception ->
-                            exception.printStackTrace()
-                            Log.e("MyLog", "Exception : $exception")
-                        }
+                    }
                 }
             }
         }

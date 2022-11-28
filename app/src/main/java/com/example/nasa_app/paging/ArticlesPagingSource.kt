@@ -27,7 +27,6 @@ class ArticlesPagingSource(
         val endKey = (params.key ?: Date()).getDayBegging()
         val startKey = endKey.minusDays(20)
         val loadResults = try {
-            // TODO handling not refreshed token
             val response =
                 articlesService.getArticles(
                     startKey.toDateString(),
