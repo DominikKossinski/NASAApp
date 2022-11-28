@@ -1,7 +1,6 @@
 package com.example.nasa_app.hilt
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Room
 import com.example.nasa_app.api.call.ApiResponseAdapterFactory
 import com.example.nasa_app.api.nasa.ArticlesService
@@ -10,12 +9,12 @@ import com.example.nasa_app.paging.ArticlesRepository
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
 import com.example.nasa_app.utils.analitics.AnalyticsTracker
+import com.example.nasa_app.utils.interceptors.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,34 +29,15 @@ object AppModule {
         return PreferencesHelper(applicationContext)
     }
 
+    @Provides
+    fun provideAuthInterceptor(preferencesHelper: PreferencesHelper): AuthInterceptor {
+        return AuthInterceptor(preferencesHelper)
+    }
 
     @Provides
-    fun provideOkHttpClient(preferencesHelper: PreferencesHelper): OkHttpClient {
+    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor { chain ->
-                val originalRequest = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer $preferencesHelper.token")
-                    .build()
-                val initialResponse = chain.proceed(originalRequest)
-                if (originalRequest.headers["Test"] != null) {
-                    return@addInterceptor initialResponse
-                } else {
-                    if (initialResponse.code == 403 || initialResponse.code == 401) {
-                        return@addInterceptor runBlocking {
-                            initialResponse.close()
-                            preferencesHelper.refreshToken()
-                            val token = preferencesHelper.token
-                            val newRequest = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer $token")
-                                .addHeader("TokenRefreshed", "Test")
-                                .build()
-                            chain.proceed(newRequest)
-                        }
-                    } else {
-                        return@addInterceptor initialResponse
-                    }
-                }
-            }
+            .addInterceptor(authInterceptor)
             .build()
     }
 
