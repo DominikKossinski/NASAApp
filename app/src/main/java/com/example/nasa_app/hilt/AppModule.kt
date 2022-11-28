@@ -25,16 +25,19 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
+    @Singleton
     fun providePreferencesHelper(@ApplicationContext applicationContext: Context): PreferencesHelper {
         return PreferencesHelper(applicationContext)
     }
 
     @Provides
+    @Singleton
     fun provideAuthInterceptor(preferencesHelper: PreferencesHelper): AuthInterceptor {
         return AuthInterceptor(preferencesHelper)
     }
 
     @Provides
+    @Singleton
     fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
@@ -42,6 +45,7 @@ object AppModule {
     }
 
     @Provides
+    @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .client(client)
@@ -52,16 +56,19 @@ object AppModule {
     }
 
     @Provides
+    @Singleton
     fun provideNasaService(retrofit: Retrofit): ArticlesService {
         return retrofit.create(ArticlesService::class.java)
     }
 
     @Provides
+    @Singleton
     fun provideArticlesRepository(articlesService: ArticlesService): ArticlesRepository {
         return ArticlesRepository(articlesService)
     }
 
     @Provides
+    @Singleton
     fun provideNasaNotificationsManager(
         @ApplicationContext applicationContext: Context,
         preferencesHelper: PreferencesHelper
@@ -70,6 +77,7 @@ object AppModule {
     }
 
     @Provides
+    @Singleton
     fun provideAppDatabase(@ApplicationContext applicationContext: Context): AppDatabase {
         return Room.databaseBuilder(
             applicationContext,
