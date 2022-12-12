@@ -3,6 +3,7 @@ package com.example.nasa_app.room
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.nasa_app.api.nasa.NasaArticle
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +21,7 @@ interface NasaArticlesDao {
     @Query("SELECT DATE FROM NasaArticle")
     suspend fun getSavedDates(): List<String>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveArticle(article: NasaArticle)
 
     @Delete

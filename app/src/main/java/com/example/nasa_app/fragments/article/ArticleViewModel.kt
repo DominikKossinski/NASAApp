@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.nasa_app.R
 import com.example.nasa_app.api.nasa.ArticlesService
 import com.example.nasa_app.api.nasa.NasaArticle
+import com.example.nasa_app.api.nasa.SaveArticleRequest
 import com.example.nasa_app.architecture.BaseViewModel
 import com.example.nasa_app.extensions.toDateString
 import com.example.nasa_app.room.AppDatabase
@@ -50,13 +51,9 @@ class ArticleViewModel @Inject constructor(
 
     fun saveArticle() {
         articleFlow.value?.let { article ->
-            val userId = firebaseAuth.currentUser?.uid ?: return
-            val date = article.date.toDateString()
-            val articleData = hashMapOf(
-                "date" to date
-            )
-            // TODO save mark as saved on Backend
-            viewModelScope.launch {
+            makeRequest {
+                articlesService.postSavedArticle(SaveArticleRequest(article.date))
+                Log.d("MyLog", "Date: ${article.date}")
                 appDatabase.nasaArticlesDao().saveArticle(article)
                 setToastMessage(R.string.article_saved)
                 getSavedArticle()

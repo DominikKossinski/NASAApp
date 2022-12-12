@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.nasa_app.api.nasa.ArticlesService
 import com.example.nasa_app.api.nasa.NasaArticle
 import com.example.nasa_app.architecture.BaseViewModel
+import com.example.nasa_app.extensions.toDateString
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,29 +36,26 @@ class SavedArticlesViewModel @Inject constructor(
         val userId = firebaseAuth.currentUser?.uid
         userId?.let {
             // tODO getApi dates from API
-            val apiDates = arrayListOf<String>()
-            Log.d("MyLog", "Saved dates ${apiDates}")
-            viewModelScope.launch {
+            makeRequest {
+                val apiArticles = articlesService.getSavedArticles().body ?: emptyList()
+                val apiDates = apiArticles.map {
+                    it.date.toDateString()
+                }
+                Log.d("MyLog", "Saved dates ${apiDates}")
                 val savedDates = appDatabase.nasaArticlesDao().getSavedDates()
                 val toDelete = savedDates.filter { it !in apiDates }
-                val toDownload = apiDates.filter { it !in savedDates }
+                val toSave = apiArticles.filter { it.date.toDateString() !in savedDates }
                 Log.d("MyLog", "Saved locally: $savedDates")
                 Log.d("MyLog", "To Delete: $toDelete")
-                Log.d("MyLog", "To download: $toDownload")
+                Log.d("MyLog", "To download: $toSave")
                 for (date in toDelete) {
                     appDatabase.nasaArticlesDao().deleteByDate(date)
                 }
-                makeRequest {
-                    for (date in toDownload) {
-                        val nasaResponse =
-                            articlesService.getArticle(date)
-                        nasaResponse.body?.let {
-                            appDatabase.nasaArticlesDao().saveArticle(it)
-                        }
-                    }
-                    savedArticles.value = appDatabase.nasaArticlesDao().getSavedArticles()
-                    isLoadingData.value = false
+                for (article in toSave) {
+                    appDatabase.nasaArticlesDao().saveArticle(article)
                 }
+                savedArticles.value = appDatabase.nasaArticlesDao().getSavedArticles()
+                isLoadingData.value = false
             }
         }
     }
