@@ -2,10 +2,12 @@ package com.example.nasa_app.api.nasa
 
 import com.example.nasa_app.api.call.ApiResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.Date
 
 interface ArticlesService {
 
@@ -25,4 +27,7 @@ interface ArticlesService {
 
     @POST("/api/saved-articles")
     suspend fun postSavedArticle(@Body saveArticleRequest: SaveArticleRequest)
+
+    @DELETE("/api/saved-articles/{date}")
+    suspend fun deleteSavedArticle(@Path("date") date: String)
 }

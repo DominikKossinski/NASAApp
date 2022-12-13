@@ -1,6 +1,5 @@
 package com.example.nasa_app.extensions
 
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 

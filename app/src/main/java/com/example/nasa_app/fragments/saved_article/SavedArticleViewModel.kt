@@ -3,6 +3,7 @@ package com.example.nasa_app.fragments.saved_article
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.nasa_app.R
+import com.example.nasa_app.api.nasa.ArticlesService
 import com.example.nasa_app.api.nasa.NasaArticle
 import com.example.nasa_app.architecture.BaseViewModel
 import com.example.nasa_app.extensions.toDateString
@@ -15,6 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SavedArticleViewModel @Inject constructor(
+    private val articlesService: ArticlesService,
     savedStateHandle: SavedStateHandle,
     preferencesHelper: PreferencesHelper,
     appDatabase: AppDatabase
@@ -44,13 +46,11 @@ class SavedArticleViewModel @Inject constructor(
 
     fun deleteArticle() {
         savedArticle.value?.let { article ->
-            val userId = firebaseAuth.currentUser?.uid ?: return
-            val date = article.date.toDateString()
-            // TODO mark as deleted on backend
-            viewModelScope.launch {
+            makeRequest {
+                articlesService.deleteSavedArticle(article.date.toDateString())
                 appDatabase.nasaArticlesDao().deleteArticle(article)
                 setToastMessage(R.string.article_deleted)
-                navigateBack()
+                getSavedArticle()
             }
         }
     }

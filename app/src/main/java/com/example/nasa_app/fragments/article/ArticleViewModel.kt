@@ -1,6 +1,5 @@
 package com.example.nasa_app.fragments.article
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.nasa_app.R
@@ -42,9 +41,7 @@ class ArticleViewModel @Inject constructor(
 
     fun fetchArticle() {
         makeRequest {
-            Log.d("MyLog", "Date $date")
             val response = articlesService.getArticle(date)
-            Log.d("MyLog", "Response: ${response.body}")
             response.body?.let { articleFlow.value = it }
         }
     }
@@ -53,7 +50,6 @@ class ArticleViewModel @Inject constructor(
         articleFlow.value?.let { article ->
             makeRequest {
                 articlesService.postSavedArticle(SaveArticleRequest(article.date))
-                Log.d("MyLog", "Date: ${article.date}")
                 appDatabase.nasaArticlesDao().saveArticle(article)
                 setToastMessage(R.string.article_saved)
                 getSavedArticle()
@@ -63,15 +59,12 @@ class ArticleViewModel @Inject constructor(
 
     fun deleteArticle() {
         articleFlow.value?.let { article ->
-            val userId = firebaseAuth.currentUser?.uid ?: return
-            val date = article.date.toDateString()
-            // TODO save mark as deleted on Backend
-            viewModelScope.launch {
+            makeRequest {
+                articlesService.deleteSavedArticle(article.date.toDateString())
                 appDatabase.nasaArticlesDao().deleteArticle(article)
                 setToastMessage(R.string.article_deleted)
                 getSavedArticle()
             }
-
         }
     }
 }
