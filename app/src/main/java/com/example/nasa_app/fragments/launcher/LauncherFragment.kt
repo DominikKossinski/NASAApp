@@ -24,9 +24,7 @@ class LauncherFragment : BaseFragment<LauncherViewModel, FragmentLauncherBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch {
-            viewModel.fetchArticles()
-        }
+        viewModel.fetchArticles()
     }
 
     override fun collectFlow() {

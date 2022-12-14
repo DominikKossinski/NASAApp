@@ -1,8 +1,22 @@
 package com.example.nasa_app.utils
 
 import android.content.Context
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.tasks.await
 
 class PreferencesHelper(applicationContext: Context) {
+
+    private val firebaseAuth = FirebaseAuth.getInstance()
+
+    suspend fun refreshToken() {
+        val result = firebaseAuth.currentUser?.getIdToken(true)?.await()
+        token = result?.token
+        firebaseAuth.currentUser?.getIdToken(true)?.addOnSuccessListener {
+            token = it.token
+        }?.addOnFailureListener {
+            throw  it
+        }
+    }
 
     companion object {
         private const val TOKEN = "TOKEN"

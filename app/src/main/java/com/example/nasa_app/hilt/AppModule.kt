@@ -2,13 +2,16 @@ package com.example.nasa_app.hilt
 
 import android.content.Context
 import androidx.room.Room
+import com.example.nasa_app.api.Converters
 import com.example.nasa_app.api.call.ApiResponseAdapterFactory
-import com.example.nasa_app.api.nasa.NasaService
+import com.example.nasa_app.api.nasa.ArticlesService
 import com.example.nasa_app.managers.NasaNotificationsManager
 import com.example.nasa_app.paging.ArticlesRepository
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
 import com.example.nasa_app.utils.analitics.AnalyticsTracker
+import com.example.nasa_app.utils.interceptors.AuthInterceptor
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +20,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Date
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -24,36 +28,52 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder().build()
-    }
-
-    @Provides
-    fun provideRetrofit(client: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .client(client)
-            .baseUrl("https://api.nasa.gov/")
-            .addCallAdapterFactory(ApiResponseAdapterFactory())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    @Provides
-    fun provideNasaService(retrofit: Retrofit): NasaService {
-        return retrofit.create(NasaService::class.java)
-    }
-
-    @Provides
-    fun provideArticlesRepository(nasaService: NasaService): ArticlesRepository {
-        return ArticlesRepository(nasaService)
-    }
-
-    @Provides
+    @Singleton
     fun providePreferencesHelper(@ApplicationContext applicationContext: Context): PreferencesHelper {
         return PreferencesHelper(applicationContext)
     }
 
     @Provides
+    @Singleton
+    fun provideAuthInterceptor(preferencesHelper: PreferencesHelper): AuthInterceptor {
+        return AuthInterceptor(preferencesHelper)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(client: OkHttpClient): Retrofit {
+        val gsonBuilder = GsonBuilder()
+        gsonBuilder.registerTypeAdapter(Date::class.java, Converters())
+        return Retrofit.Builder()
+            .client(client)
+            .baseUrl("http://10.0.2.2:8080/")
+            .addCallAdapterFactory(ApiResponseAdapterFactory())
+            .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNasaService(retrofit: Retrofit): ArticlesService {
+        return retrofit.create(ArticlesService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideArticlesRepository(articlesService: ArticlesService): ArticlesRepository {
+        return ArticlesRepository(articlesService)
+    }
+
+    @Provides
+    @Singleton
     fun provideNasaNotificationsManager(
         @ApplicationContext applicationContext: Context,
         preferencesHelper: PreferencesHelper
@@ -62,6 +82,7 @@ object AppModule {
     }
 
     @Provides
+    @Singleton
     fun provideAppDatabase(@ApplicationContext applicationContext: Context): AppDatabase {
         return Room.databaseBuilder(
             applicationContext,

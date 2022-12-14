@@ -1,5 +1,6 @@
 package com.example.nasa_app.fragments.articles
 
+import android.util.Log
 import com.example.nasa_app.api.nasa.NasaArticle
 import com.example.nasa_app.paging.ArticlesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,7 @@ class ArticlesViewModel @Inject constructor(
 
 
     fun navigateToArticle(article: NasaArticle) {
+        Log.d("MyLog", "Article: $article")
         analyticsTracker.logClickOpenArticle(article)
         navigate(ArticlesFragmentDirections.goToArticle(article.date.toDateString()))
     }
