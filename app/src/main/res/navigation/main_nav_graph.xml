@@ -30,6 +30,10 @@
         <argument
             android:name="date"
             app:argType="string" />
+
+        <action
+            android:id="@+id/showCommentsBottomSheet"
+            app:destination="@id/commentsBottomSheet" />
     </fragment>
 
     <fragment
@@ -83,6 +87,12 @@
             app:destination="@id/articleFragment"
             app:popUpTo="@id/articlesFragment" />
     </dialog>
+
+    <dialog
+        android:id="@+id/commentsBottomSheet"
+        android:name="com.example.nasa_app.dialogs.comments.CommentsBottomSheet"
+        android:label="CommentsBottomSheet"
+        tools:layout="@layout/dialog_comments" />
 
     <action
         android:id="@+id/toArticles"
