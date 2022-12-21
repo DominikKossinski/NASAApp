@@ -9,6 +9,7 @@ import com.example.nasa_app.architecture.BaseBottomSheet
 import com.example.nasa_app.databinding.DialogCommentsBinding
 import com.example.nasa_app.extensions.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
@@ -55,5 +56,11 @@ class CommentsBottomSheet : BaseBottomSheet<CommentsViewModel, DialogCommentsBin
                 }
             }
         }
+        lifecycleScope.launchWhenCreated {
+            viewModel.clearCommentChannel.consumeEach {
+                binding.etComment.setText("")
+            }
+        }
+        // TODO progress bar
     }
 }

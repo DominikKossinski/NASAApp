@@ -52,6 +52,9 @@
     <string name="set_notification">Set notification</string>
     <string name="daily_notification_set">Daily notification has been set</string>
 
+    <!-- COMMENTS -->
+    <string name="comments_comment_posted">Comment has been posted</string>
+
     <!--NOTIFICATION-->
     <string name="new_article">New article is now available</string>
 
