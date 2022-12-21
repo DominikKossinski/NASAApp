@@ -11,3 +11,7 @@ data class ArticleComment(
 ) {
     val isEdited = updatedAt != null
 }
+
+data class ArticleCommentRequest(
+    val comment: String
+)

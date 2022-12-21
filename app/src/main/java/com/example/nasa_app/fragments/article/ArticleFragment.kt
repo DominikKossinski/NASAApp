@@ -46,6 +46,9 @@ class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>()
         binding.toolbar.setNavigationOnClickListener {
             viewModel.navigateBack()
         }
+        binding.btnComment.setOnClickListener {
+            viewModel.showCommentsDialog()
+        }
     }
 
     override fun collectFlow() {

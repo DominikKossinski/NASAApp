@@ -67,4 +67,8 @@ class ArticleViewModel @Inject constructor(
             }
         }
     }
+
+    fun showCommentsDialog() {
+        navigate(ArticleFragmentDirections.showCommentsBottomSheet(date))
+    }
 }

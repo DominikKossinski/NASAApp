@@ -29,7 +29,7 @@ interface ArticlesService {
     suspend fun getArticleComments(@Path("date") date: String): List<ArticleComment>
 
     @POST("/api/articles/{date}/comments")
-    suspend fun postComment(@Path("date") date: String)
+    suspend fun postComment(@Path("date") date: String, @Body commentRequest: ArticleCommentRequest)
 
 
     @PUT("/api/articles/{date}/comments/{commentId}")
