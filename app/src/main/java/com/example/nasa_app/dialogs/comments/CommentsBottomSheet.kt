@@ -2,6 +2,7 @@ package com.example.nasa_app.dialogs.comments
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,11 +38,17 @@ class CommentsBottomSheet : BaseBottomSheet<CommentsViewModel, DialogCommentsBin
 
     private fun setupRecyclerView() {
         binding.rvComments.adapter = adapter
+        binding.rvComments.setHasFixedSize(false)
         binding.rvComments.layoutManager = LinearLayoutManager(requireContext())
     }
 
     override fun collectFlow() {
         super.collectFlow()
+        lifecycleScope.launchWhenCreated {
+            viewModel.isLoadingData.collectLatest {
+                binding.progressBar.isVisible = it
+            }
+        }
         lifecycleScope.launchWhenCreated {
             viewModel.isCommentButtonEnabled.collectLatest {
                 binding.btnComment.isEnabled = it
@@ -57,10 +64,9 @@ class CommentsBottomSheet : BaseBottomSheet<CommentsViewModel, DialogCommentsBin
             }
         }
         lifecycleScope.launchWhenCreated {
-            viewModel.clearCommentChannel.consumeEach {
+            viewModel.commentPostedChannel.consumeEach {
                 binding.etComment.setText("")
             }
         }
-        // TODO progress bar
     }
 }

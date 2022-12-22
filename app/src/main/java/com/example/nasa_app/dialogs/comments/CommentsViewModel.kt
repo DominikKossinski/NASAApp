@@ -27,7 +27,7 @@ class CommentsViewModel @Inject constructor(
 
     private val commentFlow = MutableStateFlow("")
     val commentsFlow = MutableStateFlow<List<ArticleComment>?>(null)
-    val clearCommentChannel = Channel<Unit>()
+    val commentPostedChannel = Channel<Unit>()
     val isCommentButtonEnabled = combine(isLoadingData, commentFlow) { isLoading, comment ->
         return@combine !isLoading && comment.isNotBlank()
     }
@@ -52,7 +52,7 @@ class CommentsViewModel @Inject constructor(
             Log.d("MyLog", "PostComment: ${commentFlow.value}")
             articlesService.postComment(date, ArticleCommentRequest(commentFlow.value))
             commentFlow.value = ""
-            clearCommentChannel.send(Unit)
+            commentPostedChannel.send(Unit)
             setToastMessage(R.string.comments_comment_posted)
             fetchComments()
         }
