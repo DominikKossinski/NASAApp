@@ -53,6 +53,8 @@
     <string name="daily_notification_set">Daily notification has been set</string>
 
     <!-- COMMENTS -->
+    <string name="comments_comments">Comments</string>
+    <string name="comments_write_a_comment">Write a comment</string>
     <string name="comments_comment_posted">Comment has been posted</string>
 
     <!--NOTIFICATION-->
