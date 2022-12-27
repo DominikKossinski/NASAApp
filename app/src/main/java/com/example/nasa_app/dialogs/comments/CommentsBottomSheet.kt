@@ -20,7 +20,6 @@ class CommentsBottomSheet : BaseBottomSheet<CommentsViewModel, DialogCommentsBin
 
     private val adapter = CommentsRvAdapter()
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
@@ -41,6 +40,9 @@ class CommentsBottomSheet : BaseBottomSheet<CommentsViewModel, DialogCommentsBin
         binding.rvComments.setHasFixedSize(false)
         binding.rvComments.layoutManager = LinearLayoutManager(requireContext())
         adapter.currentUserId = viewModel.getUserId()
+        adapter.setOnEditClickListener {
+            viewModel.showEditCommentDialog(it.id, it.comment)
+        }
     }
 
     override fun collectFlow() {
@@ -69,5 +71,10 @@ class CommentsBottomSheet : BaseBottomSheet<CommentsViewModel, DialogCommentsBin
                 binding.etComment.setText("")
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchComments()
     }
 }

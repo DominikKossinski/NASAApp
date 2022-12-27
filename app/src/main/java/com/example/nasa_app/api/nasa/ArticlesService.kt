@@ -33,7 +33,11 @@ interface ArticlesService {
 
 
     @PUT("/api/articles/{date}/comments/{commentId}")
-    suspend fun putComment(@Path("date") date: String, @Path("commentId") commentId: String)
+    suspend fun putComment(
+        @Path("date") date: String,
+        @Path("commentId") commentId: Int,
+        @Body commentRequest: ArticleCommentRequest
+    )
 
 }
 

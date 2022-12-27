@@ -23,7 +23,7 @@ class CommentsViewModel @Inject constructor(
     appDatabase: AppDatabase
 ) : BaseViewModel(preferencesHelper, appDatabase) {
 
-    private val date = savedStateHandle.get<String>("date")!!
+    private val args = CommentsBottomSheetArgs.fromSavedStateHandle(savedStateHandle)
 
     private val commentFlow = MutableStateFlow("")
     val commentsFlow = MutableStateFlow<List<ArticleComment>?>(null)
@@ -38,7 +38,7 @@ class CommentsViewModel @Inject constructor(
 
     fun fetchComments() {
         makeRequest {
-            val comments = articlesService.getArticleComments(date)
+            val comments = articlesService.getArticleComments(args.date)
             commentsFlow.value = comments
         }
     }
@@ -50,7 +50,7 @@ class CommentsViewModel @Inject constructor(
     fun postComment() {
         makeRequest {
             Log.d("MyLog", "PostComment: ${commentFlow.value}")
-            articlesService.postComment(date, ArticleCommentRequest(commentFlow.value))
+            articlesService.postComment(args.date, ArticleCommentRequest(commentFlow.value))
             commentFlow.value = ""
             commentPostedChannel.send(Unit)
             setToastMessage(R.string.comments_comment_posted)
@@ -60,5 +60,9 @@ class CommentsViewModel @Inject constructor(
 
     fun getUserId(): String? {
         return firebaseAuth.currentUser?.uid
+    }
+
+    fun showEditCommentDialog(commentId: Int, comment: String) {
+        navigate(CommentsBottomSheetDirections.showEditCommentDialog(args.date, commentId, comment))
     }
 }

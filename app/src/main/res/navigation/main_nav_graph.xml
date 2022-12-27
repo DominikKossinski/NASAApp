@@ -97,6 +97,29 @@
         <argument
             android:name="date"
             app:argType="string" />
+
+        <action
+            android:id="@+id/showEditCommentDialog"
+            app:destination="@id/editCommentDialog" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/editCommentDialog"
+        android:name="com.example.nasa_app.dialogs.comments.edit.EditCommentDialog"
+        android:label="EditCommentDialog"
+        tools:layout="@layout/dialog_edit_comment">
+
+        <argument
+            android:name="date"
+            app:argType="string" />
+
+        <argument
+            android:name="commentId"
+            app:argType="integer" />
+
+        <argument
+            android:name="comment"
+            app:argType="string" />
     </dialog>
 
     <action

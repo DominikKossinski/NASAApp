@@ -57,6 +57,7 @@
     <string name="comments_write_a_comment">Write a comment</string>
     <string name="comments_comment_posted">Comment has been posted</string>
     <string name="comments_edited_comment_format">%1$s (edited)</string>
+    <string name="comments_comment_edited">Comment edited</string>
 
     <!--NOTIFICATION-->
     <string name="new_article">New article is now available</string>
