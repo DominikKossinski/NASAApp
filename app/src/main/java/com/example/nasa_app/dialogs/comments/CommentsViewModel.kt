@@ -57,4 +57,8 @@ class CommentsViewModel @Inject constructor(
             fetchComments()
         }
     }
+
+    fun getUserId(): String? {
+        return firebaseAuth.currentUser?.uid
+    }
 }

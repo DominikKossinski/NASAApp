@@ -40,6 +40,7 @@ class CommentsBottomSheet : BaseBottomSheet<CommentsViewModel, DialogCommentsBin
         binding.rvComments.adapter = adapter
         binding.rvComments.setHasFixedSize(false)
         binding.rvComments.layoutManager = LinearLayoutManager(requireContext())
+        adapter.currentUserId = viewModel.getUserId()
     }
 
     override fun collectFlow() {
