@@ -18,6 +18,8 @@
     <string name="search">Search</string>
     <string name="password">Password</string>
     <string name="user_name">User Name</string>
+    <string name="edit">Edit</string>
+    <string name="cancel">Cancel</string>
 
     <string name="create_account">Create Account</string>
     <string name="empty_name">Empty name</string>
@@ -58,6 +60,8 @@
     <string name="comments_comment_posted">Comment has been posted</string>
     <string name="comments_edited_comment_format">%1$s (edited)</string>
     <string name="comments_comment_edited">Comment edited</string>
+
+    <string name="edit_comment_edit_comment">Edit Comment</string>
 
     <!--NOTIFICATION-->
     <string name="new_article">New article is now available</string>
