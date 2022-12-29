@@ -18,7 +18,6 @@ import com.example.nasa_app.architecture.BaseFragment
 import com.example.nasa_app.databinding.FragmentArticleBinding
 import com.example.nasa_app.extensions.toDateString
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>() {
@@ -55,6 +54,7 @@ class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>()
         super.collectFlow()
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.articleFlow.collect {
+                binding.btnComment.isVisible = it != null
                 it?.let { setupArticleData(it) }
             }
         }
