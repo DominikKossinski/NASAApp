@@ -11,6 +11,7 @@ android {
     buildToolsVersion "30.0.3"
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility "1.8"
         targetCompatibility "1.8"
     }
@@ -107,6 +108,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.0.2')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

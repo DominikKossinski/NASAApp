@@ -15,3 +15,13 @@ fun Date.getDayBegging(): Date {
 fun Date.minusDays(days: Long): Date {
     return Date(this.time - (days * 24 * 60 * 60 * 1_000))
 }
+
+fun Date.getHoursAndMinutes(): String {
+    val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+    return formatter.format(this)
+}
+
+fun Date.getDateTimeString(): String {
+    val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+    return formatter.format(this)
+}

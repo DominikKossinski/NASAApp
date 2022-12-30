@@ -2,7 +2,8 @@ package com.example.nasa_app.hilt
 
 import android.content.Context
 import androidx.room.Room
-import com.example.nasa_app.api.Converters
+import com.example.nasa_app.api.LocalDateConverter
+import com.example.nasa_app.api.LocalDateTimeConverter
 import com.example.nasa_app.api.call.ApiResponseAdapterFactory
 import com.example.nasa_app.api.nasa.ArticlesService
 import com.example.nasa_app.managers.NasaNotificationsManager
@@ -20,6 +21,8 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.Date
 import javax.inject.Singleton
 
@@ -51,7 +54,8 @@ object AppModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         val gsonBuilder = GsonBuilder()
-        gsonBuilder.registerTypeAdapter(Date::class.java, Converters())
+        gsonBuilder.registerTypeAdapter(LocalDate::class.java, LocalDateConverter())
+        gsonBuilder.registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeConverter())
         return Retrofit.Builder()
             .client(client)
             .baseUrl("http://10.0.2.2:8080/")

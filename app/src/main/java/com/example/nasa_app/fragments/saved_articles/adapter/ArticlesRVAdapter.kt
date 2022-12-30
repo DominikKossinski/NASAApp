@@ -6,13 +6,14 @@ import com.example.nasa_app.api.nasa.NasaArticle
 import com.example.nasa_app.architecture.BaseRecyclerViewAdapter
 import com.example.nasa_app.databinding.ItemArticleBinding
 import com.example.nasa_app.extensions.toDateString
+import com.example.nasa_app.extensions.toLocalDateString
 
 class ArticlesRVAdapter : BaseRecyclerViewAdapter<NasaArticle, ItemArticleBinding>() {
 
     override fun onBindViewHolder(holder: BaseViewHolder<ItemArticleBinding>, position: Int) {
         val article = items[position]
         holder.binding.titleTextView.text = article.title
-        holder.binding.dateTextView.text = article.date.toDateString()
+        holder.binding.dateTextView.text = article.date.toLocalDateString()
         if (article.mediaType == NasaArticle.NasaMediaType.IMAGE) {
             Glide.with(holder.itemView)
                 .load(article.hdurl)

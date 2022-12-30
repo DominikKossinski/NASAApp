@@ -6,6 +6,7 @@ import com.example.nasa_app.api.nasa.ArticlesService
 import com.example.nasa_app.api.nasa.NasaArticle
 import com.example.nasa_app.architecture.BaseViewModel
 import com.example.nasa_app.extensions.toDateString
+import com.example.nasa_app.extensions.toLocalDateString
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,16 +36,15 @@ class SavedArticlesViewModel @Inject constructor(
         isLoadingData.value = true
         val userId = firebaseAuth.currentUser?.uid
         userId?.let {
-            // tODO getApi dates from API
             makeRequest {
                 val apiArticles = articlesService.getSavedArticles().body ?: emptyList()
                 val apiDates = apiArticles.map {
-                    it.date.toDateString()
+                    it.date.toLocalDateString()
                 }
                 Log.d("MyLog", "Saved dates ${apiDates}")
                 val savedDates = appDatabase.nasaArticlesDao().getSavedDates()
                 val toDelete = savedDates.filter { it !in apiDates }
-                val toSave = apiArticles.filter { it.date.toDateString() !in savedDates }
+                val toSave = apiArticles.filter { it.date.toLocalDateString() !in savedDates }
                 Log.d("MyLog", "Saved locally: $savedDates")
                 Log.d("MyLog", "To Delete: $toDelete")
                 Log.d("MyLog", "To download: $toSave")

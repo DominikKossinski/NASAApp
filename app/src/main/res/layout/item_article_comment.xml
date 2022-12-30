@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/ripple_rounded_black"
+    android:backgroundTint="#F0F0F0">
 
 
     <TextView
@@ -13,10 +15,24 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Author" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/tvAuthor"
+        tools:text="2022-12-13 12:15" />
 
     <TextView
         android:id="@+id/tvComment"
@@ -29,7 +45,7 @@
         app:layout_constraintBottom_toTopOf="@id/tvEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvAuthor" />
+        app:layout_constraintTop_toBottomOf="@id/tvDate" />
 
     <TextView
         android:id="@+id/tvEdit"
@@ -38,10 +54,13 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:padding="8dp"
-        android:text="Edit"
+        android:text="@string/edit"
+        android:textSize="12sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvComment"
         tools:visibility="visible" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

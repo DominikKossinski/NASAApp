@@ -8,6 +8,7 @@ import com.example.nasa_app.architecture.BasePagingDataAdapter
 import com.example.nasa_app.architecture.BaseRecyclerViewAdapter
 import com.example.nasa_app.databinding.ItemArticleBinding
 import com.example.nasa_app.extensions.toDateString
+import com.example.nasa_app.extensions.toLocalDateString
 
 class ArticlesPagingAdapter :
     BasePagingDataAdapter<NasaArticle, ItemArticleBinding>(
@@ -20,7 +21,7 @@ class ArticlesPagingAdapter :
     ) {
         val article = getItem(position) ?: return
         holder.binding.titleTextView.text = article.title
-        holder.binding.dateTextView.text = article.date.toDateString()
+        holder.binding.dateTextView.text = article.date.toLocalDateString()
         if (article.mediaType == NasaArticle.NasaMediaType.IMAGE) {
             Glide.with(holder.itemView)
                 .load(article.hdurl)

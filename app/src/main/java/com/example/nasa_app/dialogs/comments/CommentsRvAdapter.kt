@@ -5,6 +5,7 @@ import com.example.nasa_app.R
 import com.example.nasa_app.api.nasa.ArticleComment
 import com.example.nasa_app.architecture.BaseRecyclerViewAdapter
 import com.example.nasa_app.databinding.ItemArticleCommentBinding
+import com.example.nasa_app.extensions.getCommentFormattedString
 
 class CommentsRvAdapter : BaseRecyclerViewAdapter<ArticleComment, ItemArticleCommentBinding>() {
 
@@ -22,6 +23,8 @@ class CommentsRvAdapter : BaseRecyclerViewAdapter<ArticleComment, ItemArticleCom
         holder.binding.tvEdit.setOnClickListener {
             onEditClickListener?.invoke(comment)
         }
+        holder.binding.tvDate.text =
+            holder.itemView.context.getCommentFormattedString(comment.createdAt)
         holder.binding.tvComment.text = if (comment.isEdited) {
             holder.itemView.context.getString(
                 R.string.comments_edited_comment_format, comment.comment
