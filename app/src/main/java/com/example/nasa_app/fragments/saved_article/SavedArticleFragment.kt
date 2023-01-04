@@ -16,6 +16,7 @@ import com.example.nasa_app.api.nasa.NasaArticle
 import com.example.nasa_app.architecture.BaseFragment
 import com.example.nasa_app.databinding.FragmentSavedArticleBinding
 import com.example.nasa_app.extensions.toDateString
+import com.example.nasa_app.extensions.toLocalDateString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -60,7 +61,7 @@ class SavedArticleFragment : BaseFragment<SavedArticleViewModel, FragmentSavedAr
     }
 
     private fun setupArticleData(article: NasaArticle) {
-        binding.toolbar.title = article.date.toDateString()
+        binding.toolbar.title = article.date.toLocalDateString()
         binding.articleTextView.text = article.explanation
         binding.titleTextView.text = article.title
         binding.videoLinearLayout.isVisible = article.mediaType == NasaArticle.NasaMediaType.VIDEO

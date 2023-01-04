@@ -67,5 +67,9 @@
     </style>
 
 
+    <style name="BaseDialog" parent="AppTheme">
+        <item name="windowFixedWidthMajor">80%</item>
+    </style>
+
     <color name="red">#FF0000</color>
 </resources>

@@ -1,13 +1,7 @@
 package com.example.nasa_app.api.nasa
 
 import com.example.nasa_app.api.call.ApiResponse
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
-import java.util.Date
+import retrofit2.http.*
 
 interface ArticlesService {
 
@@ -30,4 +24,20 @@ interface ArticlesService {
 
     @DELETE("/api/saved-articles/{date}")
     suspend fun deleteSavedArticle(@Path("date") date: String)
+
+    @GET("/api/articles/{date}/comments")
+    suspend fun getArticleComments(@Path("date") date: String): List<ArticleComment>
+
+    @POST("/api/articles/{date}/comments")
+    suspend fun postComment(@Path("date") date: String, @Body commentRequest: ArticleCommentRequest)
+
+
+    @PUT("/api/articles/{date}/comments/{commentId}")
+    suspend fun putComment(
+        @Path("date") date: String,
+        @Path("commentId") commentId: Int,
+        @Body commentRequest: ArticleCommentRequest
+    )
+
 }
+

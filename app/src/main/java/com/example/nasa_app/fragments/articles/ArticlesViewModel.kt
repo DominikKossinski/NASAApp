@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import com.example.nasa_app.architecture.BaseViewModel
 import com.example.nasa_app.extensions.toDateString
+import com.example.nasa_app.extensions.toLocalDateString
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
 import com.example.nasa_app.utils.analitics.AnalyticsTracker
@@ -30,7 +31,7 @@ class ArticlesViewModel @Inject constructor(
     fun navigateToArticle(article: NasaArticle) {
         Log.d("MyLog", "Article: $article")
         analyticsTracker.logClickOpenArticle(article)
-        navigate(ArticlesFragmentDirections.goToArticle(article.date.toDateString()))
+        navigate(ArticlesFragmentDirections.goToArticle(article.date.toLocalDateString()))
     }
 
     fun showArticleAddDialog() {

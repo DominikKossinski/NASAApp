@@ -11,6 +11,7 @@ import com.example.nasa_app.api.models.ApiError
 import com.example.nasa_app.architecture.BaseFragment
 import com.example.nasa_app.databinding.FragmentSavedArticlesBinding
 import com.example.nasa_app.extensions.toDateString
+import com.example.nasa_app.extensions.toLocalDateString
 import com.example.nasa_app.fragments.saved_articles.adapter.ArticlesRVAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -34,7 +35,7 @@ class SavedArticlesFragment : BaseFragment<SavedArticlesViewModel, FragmentSaved
 
     private fun setupRecyclerView() {
         adapter.setOnItemClickListener {
-            viewModel.navigateToSavedArticle(it.date.toDateString())
+            viewModel.navigateToSavedArticle(it.date.toLocalDateString())
         }
         binding.articlesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.articlesRecyclerView.adapter = adapter

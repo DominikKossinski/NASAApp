@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -21,6 +22,9 @@ abstract class BaseDialog<VM : BaseViewModel, VB : ViewBinding> : DialogFragment
 
     protected abstract val viewModel: VM
 
+//    override fun getTheme(): Int {
+////        return R.style.BaseDialog
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +41,14 @@ abstract class BaseDialog<VM : BaseViewModel, VB : ViewBinding> : DialogFragment
         )
         binding = method.invoke(null, inflater, container, false) as VB
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

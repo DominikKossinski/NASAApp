@@ -17,8 +17,8 @@ import com.example.nasa_app.api.nasa.NasaArticle
 import com.example.nasa_app.architecture.BaseFragment
 import com.example.nasa_app.databinding.FragmentArticleBinding
 import com.example.nasa_app.extensions.toDateString
+import com.example.nasa_app.extensions.toLocalDateString
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>() {
@@ -46,12 +46,16 @@ class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>()
         binding.toolbar.setNavigationOnClickListener {
             viewModel.navigateBack()
         }
+        binding.btnComment.setOnClickListener {
+            viewModel.showCommentsDialog()
+        }
     }
 
     override fun collectFlow() {
         super.collectFlow()
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.articleFlow.collect {
+                binding.btnComment.isVisible = it != null
                 it?.let { setupArticleData(it) }
             }
         }
@@ -70,7 +74,7 @@ class ArticleFragment : BaseFragment<ArticleViewModel, FragmentArticleBinding>()
     }
 
     private fun setupArticleData(article: NasaArticle) {
-        binding.toolbar.title = article.date.toDateString()
+        binding.toolbar.title = article.date.toLocalDateString()
         binding.articleTextView.text = article.explanation
         binding.titleTextView.text = article.title
         binding.videoLinearLayout.isVisible = article.mediaType == NasaArticle.NasaMediaType.VIDEO

@@ -33,7 +33,7 @@ class ArticlesPagingSource(
                     endKey.toDateString()
                 )
             val data = (response.body ?: emptyList())
-            val filtered = data.sortedByDescending { it.date.time }
+            val filtered = data //.sortedByDescending { it.date.time }
                 .filter { it.title.lowercase().contains(query.lowercase()) }
             if (filtered.isEmpty()) {
                 emptyResponses += 1

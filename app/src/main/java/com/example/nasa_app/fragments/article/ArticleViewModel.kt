@@ -8,6 +8,7 @@ import com.example.nasa_app.api.nasa.NasaArticle
 import com.example.nasa_app.api.nasa.SaveArticleRequest
 import com.example.nasa_app.architecture.BaseViewModel
 import com.example.nasa_app.extensions.toDateString
+import com.example.nasa_app.extensions.toLocalDateString
 import com.example.nasa_app.room.AppDatabase
 import com.example.nasa_app.utils.PreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -60,11 +61,15 @@ class ArticleViewModel @Inject constructor(
     fun deleteArticle() {
         articleFlow.value?.let { article ->
             makeRequest {
-                articlesService.deleteSavedArticle(article.date.toDateString())
+                articlesService.deleteSavedArticle(article.date.toLocalDateString())
                 appDatabase.nasaArticlesDao().deleteArticle(article)
                 setToastMessage(R.string.article_deleted)
                 getSavedArticle()
             }
         }
+    }
+
+    fun showCommentsDialog() {
+        navigate(ArticleFragmentDirections.showCommentsBottomSheet(date))
     }
 }
